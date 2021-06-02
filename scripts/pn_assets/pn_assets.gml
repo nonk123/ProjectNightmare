@@ -60,8 +60,7 @@ function pn_sprite_queue(_name)
 				_sprite = sprite_add(mDirSprites + getSprite, _frames, false, false, 0, 0);
 				sprite_set_offset(_sprite, _xOffset * sprite_get_width(_sprite), _yOffset * sprite_get_height(_sprite));
 				
-				queueSprite[0] = _sprite;
-				queueSprite[1] = _type;
+				queueSprite = [_sprite, _type];
 				
 				for (var i = 0; i < sprite_get_number(_sprite); i++) queueSprite[@ 2 + i] = sprite_get_texture(_sprite, i);
 				
@@ -85,27 +84,29 @@ function pn_sprite_get_sprite(_name)
 
 /*-----MATERIALS-----
 Textures used by levels and models.
-A material can be a PNG, JPEG or GIF.*/
+A material can be a PNG, JPEG or GIF.
+-----Array Indices-----
+0 - sprite
+1 - frames
+2 - speed
+3 - x scroll
+4 - y scroll
+5 - specular
+6 - crystal
+7... - textures*/
 
-#macro mDirMaterials ""
+#macro mDirMaterials "data/gfx/materials/"
 
-function PNMaterial(_name) constructor
+function pn_material_queue(_name)
 {
-	/*new PNMaterial(name)
-	--------------------
-	Loads a material from the data folder.*/
+	if (ds_map_exists(global.materials, _name)) exit
 	
-	sprite = undefined;
-	textures = undefined;
-	frames = undefined;
-	_speed = undefined;
-	xScroll = undefined;
-	yScroll = undefined;
-	specular = undefined;
-	crystal = undefined;
-	
-	var getMaterial = file_find_first(mDirMaterials + _name + ".*", 0);
-	if (getMaterial == "") show_debug_message("!!! PNMaterial: " + _name + " not found");
+	var queueMaterial, getMaterial = file_find_first(mDirMaterials + _name + ".*", 0);
+	if (getMaterial == "")
+	{
+		show_debug_message("!!! PNMaterial: " + _name + " not found");
+		exit
+	}
 	else
 	{
 		var getExt = string_lower(filename_ext(getMaterial));
@@ -114,37 +115,43 @@ function PNMaterial(_name) constructor
 			case (".png"):
 			case (".gif"):
 			case (".jpg"):
-				sprite = sprite_add(mDirMaterials + getMaterial + filename_ext(getMaterial), 1, false, false, 0, 0);
-				textures = [sprite_get_texture(sprite, 0)];
-				frames = 1;
+				//Look in materials.txt for material data before loading
+				var _sprite, _frames = 1, _speed = undefined, _xScroll = 0, _yScroll = 0, _specular = 0, _crystal = 0;
+				
+				dataTable = file_text_open_read(mDirMaterials + "materials.txt");
+				while !(file_text_eof(dataTable))
+				{
+					var data = string_parse(file_text_read_string(dataTable));
+					if (data[0] == _name)
+					{
+						_frames = real(data[1]);
+						_speed = real(data[2]);
+						_xScroll = real(data[3]);
+						_yScroll = real(data[4]);
+						_specular = real(data[5]);
+						_crystal = real(data[6]);
+						break
+					}
+					file_text_readln(dataTable);
+				}
+				file_text_close(dataTable);
+				
+				_sprite = sprite_add(mDirMaterials + getMaterial, _frames, false, false, 0, 0);
+				
+				queueMaterial = [_sprite, _frames, _speed, _xScroll, _yScroll, _specular, _crystal];
+				
+				for (var i = 0; i < sprite_get_number(_sprite); i++) queueMaterial[@ 7 + i] = sprite_get_texture(_sprite, i);
+				
+				ds_map_add(global.materials, _name, queueMaterial);
+				show_debug_message("PNMaterial: Added " + _name + " (" + string(queueMaterial) + ")");
 			break
-			default: show_debug_message("!!! PNMaterial: " + _name + " is not an image file");
+			
+			default:
+				show_debug_message("!!! PNMaterial: " + _name + " is not an image file");
+				exit
 		}
 	}
 	file_find_close();
-
-	show_debug_message("PNMaterial: Added " + _name + " (" + string(self) + ")");
-	
-	/*Texture()
-	-----------
-	Returns the material's current texture.*/
-	Texture = function() {return (textures[frames > 1 ? (current_time * _speed) mod (frames) : 0])}
-	
-	/*PNMaterial.Find(name)
-	-----------------------
-	Returns a material with the corresponding name, or undefined if none is found.*/
-	
-	static Find = function(_name) {return (global.materials[? _name])}
-	
-	/*PNMaterial.FindTexture(name)
-	------------------------------
-	Finds a material with the corresponding name and returns its current texture, or -1 if none is found.*/
-	
-	static FindTexture = function(_name)
-	{
-		var getMaterial = PNMaterial.Find(_name);
-		return (is_undefined(getMaterial) ? -1 : getMaterial.Texture())
-	}
 }
 
 /*-----SOUNDS-----

@@ -1,0 +1,3 @@
+sndCoinIntro|0
+sndMarioIntro|0
+sndCoin|1

@@ -46,7 +46,18 @@ function pn_level_goto_internal(_levelID)
 	{
 		var material = ds_map_find_first(global.materials);
 		sprite_delete(global.materials[? material][0]);
-		ds_map_delete(global.sprites, material);
+		ds_map_delete(global.materials, material);
+	}
+	repeat (ds_map_size(global.fonts))
+	{
+		var font = ds_map_find_first(global.fonts), getFont = global.fonts[? font];
+		if (is_array(getFont))
+		{
+			font_delete(getFont[0]);
+			sprite_delete(getFont[1]);
+		}
+		else font_delete(getFont);
+		ds_map_delete(global.fonts, font);
 	}
 	repeat (ds_map_size(global.sounds))
 	{
@@ -66,13 +77,13 @@ function pn_level_goto_internal(_levelID)
 	{
 		case (eLevel.logo):
 			pn_sprite_queue("sprLogo");
+			pn_font_queue("fntMario");
+			pn_font_queue("fntMessage");
 			pn_sound_load("sndCoinIntro");
 			pn_sound_load("sndMarioIntro");
 			pn_music_load("musTitle");
 
 			instance_create_depth(480, 270, 0, objIntro);
-			
-			FMODGMS_Snd_PlaySound(global.music[? "musTitle"], global.channel[0]);
 		break
 	}
 	

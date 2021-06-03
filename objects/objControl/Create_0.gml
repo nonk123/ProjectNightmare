@@ -6,6 +6,7 @@ ASSET MAPS
 
 global.sprites = ds_map_create();
 global.materials = ds_map_create();
+global.fonts = ds_map_create();
 global.sounds = ds_map_create();
 global.music = ds_map_create();
 

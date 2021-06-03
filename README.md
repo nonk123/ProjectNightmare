@@ -29,6 +29,8 @@ If you are interested in checking out our development progress, hop on over to o
 
 **Braffolk** - Custom Sprite Framework
 
+**fsuarez913** - Super Mario 256
+
 **Juju Adams** - Carton
 
 **GMLScripts.com** - scripts

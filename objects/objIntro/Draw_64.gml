@@ -1,4 +1,5 @@
 /// @description Draw Intro
+draw_set_font(pn_font_get_font("fntMario"));
 if (state < 7)
 {
 	var dir = get_timer() / 900, w = wobble * 0.04;
@@ -17,7 +18,8 @@ else
 	draw_set_color(c_white);
 	draw_text_transformed(480, 64, "DISCLAIMER", 2, 2, 0);
 	draw_set_valign(fa_center);
-	draw_text(480, 284, "This is an UNOFFICIAL NON-PROFIT fan game. It is open-sourced and freeware, and will always be.\nWe do not hold any licenses nor copyrights. This game must NOT be sold.\n\n\"If somebody sold you that game, please call the nearest government police station,\nand pray they dont work for Bill Gates\" (sic)\n\nMario, Zelda & other related series (c) Nintendo\nFMOD (c) Firelight Technologies\n\nPowered by PN Engine\n\nThank you for playing Project Nightmare!\n-Team Nightmare");
+	draw_set_font(pn_font_get_font("fntMessage"));
+	draw_text_ext_transformed(480, 300, "This is an UNOFFICIAL NON-PROFIT fan game.\nWe do not hold any licenses nor copyrights.\nThis game must NOT be sold.\n\n\"If somebody sold you that game, please call the nearest government police station, and pray they dont work for Bill Gates\" (sic)\n\nMario, Zelda & other related series (c) Nintendo\nFMOD (c) Firelight Technologies\n\nPowered by PN Engine\n\nThank you for playing Project Nightmare!\n-Team Nightmare", -1, 480, 2, 2, 0);
 	draw_set_alpha(1);
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);

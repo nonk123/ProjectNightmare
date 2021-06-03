@@ -158,6 +158,108 @@ function pn_material_queue(_name)
 	file_find_close();
 }
 
+/*-----FONTS-----
+Sprite fonts have to have a defined amount of frames in fonts.txt and have the character frames laid out like the UTF8 map.
+A font can be a TTF, PNG, JPEG or GIF.
+-----Array Indices (for sprite fonts, regular fonts point directly to their pointers)-----
+0 - font
+1 - sprite (undefined if TTF font)
+-----fonts.txt Format-----
+TTF: name|size|bold|italics|first|last
+PNG/JPEG/GIF: name|frames|first|proportional|space
+
+Refer to GML documentation on font_add and font_add_sprite for info on fonts.txt parameters:
+https://manual.yoyogames.com/GameMaker_Language/GML_Reference/Asset_Management/Fonts/font_add.htm
+https://manual.yoyogames.com/GameMaker_Language/GML_Reference/Asset_Management/Fonts/font_add_sprite.htm*/
+
+#macro mDirFonts "data/gfx/fonts/"
+
+function pn_font_queue(_name)
+{
+	if (ds_map_exists(global.fonts, _name)) exit
+	
+	var queueFont, getFont = file_find_first(mDirFonts + _name + ".*", 0);
+	if (getFont == "")
+	{
+		show_debug_message("!!! PNFont: " + _name + " not found");
+		exit
+	}
+	else
+	{
+		var getExt = string_lower(filename_ext(getFont));
+		switch (getExt)
+		{
+			case (".ttf"):
+				//Look in fonts.txt for font data before loading
+				var _size = 8, _bold = false, _italics = false, _first = 32, _last = 128;
+				
+				dataTable = file_text_open_read(mDirFonts + "fonts.txt");
+				while !(file_text_eof(dataTable))
+				{
+					var data = string_parse(file_text_read_string(dataTable));
+					if (data[0] == _name)
+					{
+						_size = real(data[1]);
+						_bold = real(data[2]);
+						_italics = real(data[3]);
+						_first = ord(data[4]);
+						_last = ord(data[5]);
+						break
+					}
+					file_text_readln(dataTable);
+				}
+				file_text_close(dataTable);
+				
+				queueFont = font_add(mDirFonts + getFont, _size, _bold, _italics, _first, _last);
+				
+				ds_map_add(global.fonts, _name, queueFont);
+				show_debug_message("PNFont: Added " + _name + " (" + string(queueFont) + ")");
+			break
+			
+			case (".png"):
+			case (".gif"):
+			case (".jpg"):
+				//Look in fonts.txt for font data before loading
+				var _sprite, _frames = 1, _first = ord("!"), _proportional = true, _space = 1;
+				
+				dataTable = file_text_open_read(mDirFonts + "fonts.txt");
+				while !(file_text_eof(dataTable))
+				{
+					var data = string_parse(file_text_read_string(dataTable));
+					if (data[0] == _name)
+					{
+						_frames = real(data[1]);
+						_first = ord(data[2]);
+						_proportional = real(data[3]);
+						_space = real(data[4]);
+						break
+					}
+					file_text_readln(dataTable);
+				}
+				file_text_close(dataTable);
+				
+				_sprite = sprite_add(mDirFonts + getFont, _frames, false, false, 0, 0);
+				
+				queueFont = [font_add_sprite(_sprite, _first, _proportional, _space), _sprite];
+				
+				ds_map_add(global.fonts, _name, queueFont);
+				show_debug_message("PNFont: Added " + _name + " (" + string(queueFont) + ")");
+			break
+			
+			default:
+				show_debug_message("!!! PNFont: " + _name + " is not a font or image file");
+				exit
+		}
+	}
+	file_find_close();
+}
+
+function pn_font_get_font(_name)
+{
+	var getFont = global.fonts[? _name];
+	return (is_array(getFont) ? getFont[0] : getFont)
+}
+
 /*-----SOUNDS-----
 Used by actors and anything otherwise. Distance falloff can be toggled.
 A sound must be an OGG.

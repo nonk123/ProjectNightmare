@@ -5,7 +5,7 @@
   "option_windows_company_info": "Can't Sleep Games",
   "option_windows_product_info": "Project Nightmare",
   "option_windows_copyright_info": "",
-  "option_windows_description_info": "Relive the Nightmare! - Mario & Link © Nintendo",
+  "option_windows_description_info": "Relive the Nightmare! - Mario & Zelda © Nintendo",
   "option_windows_display_cursor": true,
   "option_windows_icon": "${base_options_dir}/windows/icons/icon.ico",
   "option_windows_save_location": 0,

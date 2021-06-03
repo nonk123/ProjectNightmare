@@ -1,9 +1,9 @@
 /// @description Update Game
 
-if (levelStart)
+if (global.levelStart)
 {
     global.deltaTime = 1;
-    levelStart = false;
+    global.levelStart = false;
 }
 else global.deltaTime = 60 / 1000000 * delta_time;
 

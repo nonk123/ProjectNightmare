@@ -4,20 +4,25 @@ enum eLevel
 	title, debug
 }
 
-function pn_level_goto(_roomID) { pn_level_transition(_roomID, eTransition.loading); }
-
-function pn_level_transition(_roomID, _transition)
+function pn_level_goto(_levelID)
 {
+	pn_level_transition(_levelID, eTransition.loading);
+	if (object_index != objControl) instance_destroy();
+}
+
+function pn_level_transition(_levelID, _transition)
+{
+	if (instance_exists(objTransition)) exit
 	with (instance_create_depth(0, 0, 0, objTransition))
 	{
 		transition = _transition;
-		goto = _roomID;
+		goto = _levelID;
 	}
 }
 
-function pn_level_goto_internal(_roomID)
+function pn_level_goto_internal(_levelID)
 {
-	global.level = _roomID;
+	global.level = _levelID;
 	
 	//Remove everything
 	for (var i = 0; i < 2; i++)
@@ -57,14 +62,19 @@ function pn_level_goto_internal(_roomID)
 	}
 	
 	//Special level code
-	switch (_roomID)
+	switch (_levelID)
 	{
 		case (eLevel.logo):
 			pn_sprite_queue("sprLogo");
 			pn_sound_load("sndCoinIntro");
 			pn_sound_load("sndMarioIntro");
+			pn_music_load("musTitle");
 
 			instance_create_depth(480, 270, 0, objIntro);
+			
+			FMODGMS_Snd_PlaySound(global.music[? "musTitle"], global.channel[0]);
 		break
 	}
+	
+	global.levelStart = true;
 }

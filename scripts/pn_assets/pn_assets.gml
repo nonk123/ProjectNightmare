@@ -258,7 +258,7 @@ function pn_music_load(_name)
 				loadMusic = FMODGMS_Snd_LoadSound(mDirMusic + getMusic);
 		
 				ds_map_add(global.music, _name, loadMusic);
-				show_debug_message("PNSound: Added " + _name + " (" + string(loadMusic) + ")");
+				show_debug_message("PNMusic: Added " + _name + " (" + string(loadMusic) + ")");
 				
 				//Look in music.txt for music data
 				

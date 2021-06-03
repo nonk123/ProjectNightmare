@@ -18,6 +18,7 @@ rousr_dissonance_set_details("Loading");
 rousr_dissonance_set_large_image("largeicon0");
 
 FMODGMS_Sys_Create();
+FMODGMS_Sys_Initialize(2);
 
 colmesh_init();
 
@@ -40,7 +41,7 @@ global.battle = false;
 
 //Update loop
 
-levelStart = true;
+global.levelStart = true;
 global.deltaTime = 1;
 gameLoop = 0;
 

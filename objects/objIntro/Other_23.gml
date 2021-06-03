@@ -59,17 +59,36 @@ switch (state)
 	
     case (6):
         timer_tick(0);
-        if !(timer[0])
-            if (image_alpha > 0) image_alpha -= 0.05;
-            else
-                if (image_xscale > 0) image_xscale -= 0.05;
-                else
-                {
-                    image_xscale = 0;
-                    timer[0] = 40;
-                    state = 7;
-                }
+        if !(timer[0]) if (image_alpha > 0) image_alpha -= 0.05;
+        else if (image_xscale > 0) image_xscale -= 0.05;
+        else
+		{
+			image_xscale = 0;
+			timer[0] = 10;
+            state = 7;
+        }
     break
 	
-    case (7): if (timer_tick(0)) pn_level_goto(eLevel.logo); break
+    case (7): if (timer_tick(0)) state = 8; break
+	
+	case (8):
+		if (image_alpha < 1) image_alpha += 0.01;
+		else state = 9;
+	break
+	
+	case (9):
+		timer[0] = 300;
+		state = 10;
+	break
+	
+	case (10):
+		timer_tick(0);
+		if (keyboard_check_pressed(vk_anykey)) timer[0] = 1;
+		if !(timer[0]) state = 11;
+	break
+	
+	case (11):
+		if (image_alpha > 0) image_alpha -= 0.01;
+		else pn_level_goto(eLevel.logo);
+	break
 }

@@ -32,6 +32,11 @@ global.levelRoom = 0;
 global.levelName = "Loading";
 global.levelIcon = "largeicon0";
 
+//Music
+
+global.levelMusic = [noone, 1, noone, 0]; //normal, volume, battle, volume
+global.battle = false;
+
 //Update loop
 
 levelStart = true;

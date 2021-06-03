@@ -196,6 +196,12 @@
     {"CopyToMask":-1,"filePath":"datafiles/data/sfx/sounds","resourceVersion":"1.0","name":"sndCoin.ogg","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/data/sfx/sounds","resourceVersion":"1.0","name":"sndMarioIntro.ogg","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/data/sfx/sounds","resourceVersion":"1.0","name":"sndCoinIntro.ogg","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/sfx/music","resourceVersion":"1.0","name":"musOverworld.mid","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/sfx/music","resourceVersion":"1.0","name":"musMarioLose.ogg","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/sfx/music","resourceVersion":"1.0","name":"musMarioItem.ogg","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/sfx/music","resourceVersion":"1.0","name":"musTitle.ogg","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/sfx/music","resourceVersion":"1.0","name":"musLinkLose.ogg","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/sfx/music","resourceVersion":"1.0","name":"music.txt","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.2.560",

@@ -13,7 +13,9 @@ Models:
 -----Array Indices-----
 0 - sprite (array if model)
 1 - type
-2... - textures*/
+2... - textures
+-----sprites.txt Format-----
+name|frames|type|xOffset|yOffset*/
 
 #macro mDirSprites "data/gfx/sprites/"
 
@@ -93,7 +95,9 @@ A material can be a PNG, JPEG or GIF.
 4 - y scroll
 5 - specular
 6 - crystal
-7... - textures*/
+7... - textures
+-----materials.txt Format-----
+name|frames|speed|xScroll|yScroll|specular|crystal*/
 
 #macro mDirMaterials "data/gfx/materials/"
 
@@ -159,7 +163,9 @@ Used by actors and anything otherwise. Distance falloff can be toggled.
 A sound must be an OGG.
 -----Array Indices-----
 0 - sound
-1 - falloff*/
+1 - falloff
+-----sounds.txt Format-----
+name|falloff*/
 
 #macro mDirSounds "data/sfx/sounds/"
 
@@ -196,6 +202,85 @@ function pn_sound_load(_name)
 		
 		ds_map_add(global.sounds, _name, loadSound);
 		show_debug_message("PNSound: Added " + _name + " (" + string(loadSound) + ")");
+	}
+	file_find_close();
+}
+
+/*-----MUSIC-----
+Played in the background. Can be played once or looped.
+A music track can be any sound file that can be loaded by FMOD.
+-----music.txt Format-----
+name|start|end
+
+[NOTE]
+Exclude the music track from music.txt in order for it to play only once.
+Start and end points must be in samples (seconds * sample rate).
+Set start point to -1 in order to loop from start to finish (end point can be left out)*/
+
+#macro mDirMusic "data/sfx/music/"
+
+function pn_music_load(_name)
+{
+	if (ds_map_exists(global.music, _name)) exit
+	
+	var loadMusic, getMusic = file_find_first(mDirMusic + _name + ".*", 0);
+	if (getMusic == "")
+	{
+		show_debug_message("!!! PNMusic: " + _name + " not found");
+		exit
+	}
+	else
+	{
+		var getExt = string_lower(filename_ext(getMusic));
+		switch (getExt)
+		{
+			case (".aiff"):
+			case (".asf"):
+			case (".asx"):
+			case (".dls"):
+			case (".flac"):
+			case (".fsb"):
+			case (".it"):
+			case (".m3u"):
+			case (".mid"):
+			case (".mod"):
+			case (".mp2"):
+			case (".mp3"):
+			case (".ogg"):
+			case (".pls"):
+			case (".s3m"):
+			case (".vag"):
+			case (".wav"):
+			case (".wax"):
+			case (".wma"):
+			case (".xm"):
+			case (".xma"):
+				loadMusic = FMODGMS_Snd_LoadSound(mDirMusic + getMusic);
+		
+				ds_map_add(global.music, _name, loadMusic);
+				show_debug_message("PNSound: Added " + _name + " (" + string(loadMusic) + ")");
+				
+				//Look in music.txt for music data
+				
+				dataTable = file_text_open_read(mDirMusic + "music.txt");
+				while !(file_text_eof(dataTable))
+				{
+					var data = string_parse(file_text_read_string(dataTable));
+					if (data[0] == _name)
+					{
+						var _start = real(data[1]);
+						FMODGMS_Snd_Set_LoopPoints(loadMusic, _start == -1 ? 0 : _start, _start == -1 ? FMODGMS_Snd_Get_Length(loadMusic) : real(data[1]));
+						break
+					}
+					file_text_readln(dataTable);
+				}
+				file_text_close(dataTable);
+			break
+			
+			default:
+				show_debug_message("!!! PNMusic: " + _name + " is not an audio file");
+				exit
+		}
 	}
 	file_find_close();
 }

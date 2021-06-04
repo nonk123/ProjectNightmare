@@ -31,7 +31,7 @@ If you are interested in checking out our development progress, hop on over to o
 
 **fsuarez913** - Super Mario 256
 
-**Juju Adams** - Carton
+**Juju Adams** - Carton, iota
 
 **GMLScripts.com** - scripts
 

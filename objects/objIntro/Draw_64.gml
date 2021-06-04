@@ -3,9 +3,9 @@ draw_set_font(pn_font_get_font("fntMario"));
 if (state < 7)
 {
 	var dir = get_timer() / 900, w = wobble * 0.04;
-	if (image_xscale > 0) draw_sprite_ext(pn_sprite_get_sprite("sprLogo"), 0, 480, 270, 2 * (image_xscale + lengthdir_x(w, dir)), 2 * (image_xscale + lengthdir_y(w, dir)), 0, c_white, 1);
+	if (image_xscale_smooth > 0) draw_sprite_ext(pn_sprite_get_sprite("sprLogo"), 0, 480, 270, 2 * (image_xscale_smooth + lengthdir_x(w, dir)), 2 * (image_xscale_smooth + lengthdir_y(w, dir)), 0, c_white, 1);
 	draw_set_halign(fa_center);
-	draw_set_alpha(image_alpha);
+	draw_set_alpha(image_alpha_smooth);
 	draw_set_color(c_white);
 	draw_text(480, 398, "EARLY DEMO");
 	draw_set_alpha(1);
@@ -14,7 +14,7 @@ if (state < 7)
 else
 {
 	draw_set_halign(fa_center);
-	draw_set_alpha(image_alpha);
+	draw_set_alpha(image_alpha_smooth);
 	draw_set_color(c_white);
 	draw_text_transformed(480, 64, "DISCLAIMER", 2, 2, 0);
 	draw_set_valign(fa_center);

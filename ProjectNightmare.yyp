@@ -51,6 +51,7 @@
     {"id":{"name":"image_get_bbox_left","path":"scripts/image_get_bbox_left/image_get_bbox_left.yy",},"order":1,},
     {"id":{"name":"smf_rotate_vector","path":"scripts/smf_rotate_vector/smf_rotate_vector.yy",},"order":3,},
     {"id":{"name":"carton_destroy","path":"scripts/carton_destroy/carton_destroy.yy",},"order":4,},
+    {"id":{"name":"__iota_config","path":"scripts/__iota_config/__iota_config.yy",},"order":0,},
     {"id":{"name":"smf_matrix_reset","path":"scripts/smf_matrix_reset/smf_matrix_reset.yy",},"order":0,},
     {"id":{"name":"background_get_texture","path":"scripts/background_get_texture/background_get_texture.yy",},"order":7,},
     {"id":{"name":"image_set_bbox","path":"scripts/image_set_bbox/image_set_bbox.yy",},"order":14,},
@@ -87,6 +88,7 @@
     {"id":{"name":"background_assign","path":"scripts/background_assign/background_assign.yy",},"order":2,},
     {"id":{"name":"vector_subtract","path":"scripts/vector_subtract/vector_subtract.yy",},"order":10,},
     {"id":{"name":"_tri_in_square","path":"scripts/_tri_in_square/_tri_in_square.yy",},"order":2,},
+    {"id":{"name":"iota_clock","path":"scripts/iota_clock/iota_clock.yy",},"order":1,},
     {"id":{"name":"rousr_dissonance_dummy_function","path":"scripts/rousr_dissonance_dummy_function/rousr_dissonance_dummy_function.yy",},"order":1,},
     {"id":{"name":"carton_add","path":"scripts/carton_add/carton_add.yy",},"order":1,},
     {"id":{"name":"background_create_from_surface","path":"scripts/background_create_from_surface/background_create_from_surface.yy",},"order":4,},
@@ -302,6 +304,7 @@
     {"folderPath":"folders/Scripts/Snidr's Model Format/Advanced/Mathematics/Vector.yy","order":1,"resourceVersion":"1.0","name":"Vector","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Scripts/Snidr's Model Format/Advanced/Mathematics/Matrix.yy","order":2,"resourceVersion":"1.0","name":"Matrix","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Scripts/Snidr's Model Format/Advanced/Mathematics/Dual Quaternion.yy","order":3,"resourceVersion":"1.0","name":"Dual Quaternion","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Scripts/iota.yy","order":12,"resourceVersion":"1.0","name":"iota","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
     {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},

@@ -45,8 +45,8 @@ global.battle = false;
 //Update loop
 
 global.levelStart = true;
-global.deltaTime = 1;
-gameLoop = 0;
+global.clock = new iota_clock();
+global.clock.set_update_frequency(60);
 
 //Settings
 

@@ -216,7 +216,7 @@ function pn_material_queue(_name)
 function pn_material_get_texture(_name)
 {
 	var getMaterial = global.materials[? _name];
-	return (is_undefined(getMaterial) ? -1 : getMaterial[7 + (current_time * getMaterial[2]) mod (getMaterial[1])])
+	return (is_undefined(getMaterial) ? -1 : getMaterial[getMaterial[1] > 1 ? 7 + (current_time * getMaterial[2]) mod (getMaterial[1]) : 7])
 }
 
 /*-----FONTS-----

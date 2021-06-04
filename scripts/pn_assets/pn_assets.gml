@@ -1,6 +1,6 @@
 /*-----SPRITES-----
 Commonly used by actors and HUDs. Can be a 2D image or a 3D model, static or animated.
-A sprite can be a PNG, JPEG or GIF and a model is a folder containing SMF and ANI files.
+A sprite can be a PNG, JPEG or GIF and a model is a folder containing SMF, ANI and model.txt files.
 -----Types-----
 Sprites:
 	0 - normal
@@ -14,8 +14,20 @@ Models:
 0 - sprite (array if model)
 1 - type
 2... - textures
+-----Model Array Indices-----
+0 - submodels (submodel: model|skins...)
+1 - bodygroups (bodygroup: model0|material0|model1|material1...)
+2... - animation: index|frameCycle|samples...
 -----sprites.txt Format-----
-name|frames|type|xOffset|yOffset*/
+name|frames|type|xOffset|yOffset
+-----model.txt Format-----
+Submodel: 0|submodelID|skin 0 material ID...
+Bodygroup: 1|bodygroupID|model 0 material ID...
+Animation: 2|animationID|frameCycle|frames
+Frame cycles: 0 = linear
+			  1 = linear, loop
+			  2 = quadratic
+			  3 = quadratic, loop*/
 
 #macro mDirSprites "data/gfx/sprites/"
 
@@ -37,6 +49,49 @@ function pn_sprite_queue(_name)
 		var getExt = string_lower(filename_ext(getSprite));
 		switch (getExt)
 		{
+			//Models (WIP)
+			case (""):
+				//Look in model.txt for model data before loading
+				var _model, _submodels = undefined, _bodygroups = undefined, _type = eModelType._static;
+				
+				//Submodels
+				dataTable = file_text_open_read(mDirSprites + _name + "/model.txt");
+				while !(file_text_eof(dataTable))
+				{
+					var data = string_parse(file_text_read_string(dataTable));
+					if (real(data[0]) == 0)
+					{
+						var _getSubmodel = smf_model_load(mDirSprites + _name + "/" + data[1] + ".smf"), i = 0;
+						if (_getSubmodel != -1)
+						{
+							if (is_undefined(_submodels)) _submodels = [];
+							var _submodel = [_getSubmodel];
+							repeat (array_length(data) - 1)
+							{
+								var _material = data[i + 1];
+								pn_material_queue(_material);
+								_submodel[@ i + 1] = _material;
+								i++;
+							}
+						}
+						else
+						{
+							show_debug_message("!!! PNSprite: Submodel " + data[1] + " does not exist in " + _name);
+							file_text_close(dataTable);
+							exit
+						}
+					}
+					file_text_readln(dataTable);
+				}
+				file_text_close(dataTable);
+				
+				//Bodygroups
+				
+				//Animations
+				
+			break
+			
+			//Sprites
 			case (".png"):
 			case (".gif"):
 			case (".jpg"):
@@ -156,6 +211,12 @@ function pn_material_queue(_name)
 		}
 	}
 	file_find_close();
+}
+
+function pn_material_get_texture(_name)
+{
+	var getMaterial = global.materials[? _name];
+	return (is_undefined(getMaterial) ? -1 : getMaterial[7 + (current_time * getMaterial[2]) mod (getMaterial[1])])
 }
 
 /*-----FONTS-----

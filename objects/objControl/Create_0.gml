@@ -18,6 +18,8 @@ rousr_dissonance_create("732560402873057320");
 rousr_dissonance_set_details("Loading");
 rousr_dissonance_set_large_image("largeicon0");
 
+image_system_init();
+
 FMODGMS_Sys_Create();
 FMODGMS_Sys_Initialize(2);
 

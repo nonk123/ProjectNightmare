@@ -246,6 +246,7 @@
     {"id":{"name":"image_stream_start","path":"scripts/image_stream_start/image_stream_start.yy",},"order":13,},
     {"id":{"name":"cam_set_projmat","path":"scripts/cam_set_projmat/cam_set_projmat.yy",},"order":5,},
     {"id":{"name":"smf_normalize","path":"scripts/smf_normalize/smf_normalize.yy",},"order":0,},
+    {"id":{"name":"objActor","path":"objects/objActor/objActor.yy",},"order":4,},
     {"id":{"name":"draw_image_stretched_ext","path":"scripts/draw_image_stretched_ext/draw_image_stretched_ext.yy",},"order":9,},
     {"id":{"name":"rmMain","path":"rooms/rmMain/rmMain.yy",},"order":0,},
   ],

@@ -2,9 +2,6 @@
 /// @param animationIndex
 /// @param  type
 /// @param  time
-/// @param animationIndex
-/// @param type
-/// @param time
 function smf_sample_create(argument0, argument1, argument2)
 {
 	/*Script made by TheSnidr

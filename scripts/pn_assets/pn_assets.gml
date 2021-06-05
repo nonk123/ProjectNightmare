@@ -130,12 +130,15 @@ function pn_sprite_queue(_name)
 					if (real(data[0]) == 2)
 					{
 						_type = eModelType.animated;
-						var _animation = [], _animationIndex = smf_animation_load(mDirSprites + _name + "/" + data[1] + ".ani");
+						var _animationIndex = smf_animation_load(mDirSprites + _name + "/" + data[1] + ".ani");
 						if (_animationIndex == -1)
 						{
 							show_debug_message("!!! PNSprite: Animation " + data[i] + " does not exist in " + _name);
 							exit
 						}
+						var _animation = [_animationIndex, real(data[2])];
+						for (var i = 0, n = real(data[3]); i < n; i++) _animation[@ 2 + i] = smf_sample_create(_animationIndex, _animation[1], i / n);
+						if ((_animation[1] == SMF_play_linear || _animation[1] == SMF_play_quadratic) && n > 1) _animation[@ 2 + n] = smf_sample_create(_animationIndex, _animation[1], 1);
 						_model[@ array_length(_model)] = _animation;
 					}
 					file_text_readln(dataTable);

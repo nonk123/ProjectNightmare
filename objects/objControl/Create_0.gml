@@ -35,6 +35,8 @@ global.level = undefined;
 global.levelRoom = 0;
 global.levelName = "Loading";
 global.levelIcon = "largeicon0";
+global.levelData = ds_map_create();
+global.events = ds_map_create();
 
 //Music
 

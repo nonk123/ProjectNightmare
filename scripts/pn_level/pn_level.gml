@@ -4,6 +4,8 @@ enum eLevel
 	title, debug
 }
 
+enum eRoomData {models, collision, actors, movers, deadActors}
+
 function pn_level_goto(_levelID)
 {
 	pn_level_transition(_levelID, eTransition.loading);

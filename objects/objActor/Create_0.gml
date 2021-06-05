@@ -2,7 +2,8 @@
 
 //Level
 tag = 0;
-uID = 0;
+roomID = 0; //Spawning room ID
+uID = -1; //Unique ID in own room to prevent duplication via room changing
 
 //General
 hp = 0;
@@ -37,8 +38,9 @@ bounciness = 0;
 fCollision = true;
 fEnemy = false; //Make game detect actor as an enemy
 fGravity = true;
-fSmooth = true; //Smooth movement in framerates higher than 60
+fPersistent = false; //If enabled, won't re-appear in its starting room once destroyed
 fShadow = true;
+fSmooth = true; //Smooth movement in framerates higher than 60
 fVisible = true; //Enable actor drawing
 
 //Update Actor (automatically called by global.clock, but has to be added first)

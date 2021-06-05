@@ -1,6 +1,5 @@
 /// @description  @description smf_animation_load(filename)
 /// @param filename
-/// @param filename
 function smf_animation_load(argument0)
 {
 	/*Script made by TheSnidr
@@ -9,6 +8,7 @@ function smf_animation_load(argument0)
 	var i, f, k, file, boneNum, frameNum, animationBuffer, animationIndex, frameGrid, Q;
 	
 	file = argument0;
+	if !(file_exists(file)) return (-1)
 	animationBuffer = buffer_load(file);
 	boneNum = buffer_read(animationBuffer, buffer_u8);
 	frameNum = buffer_read(animationBuffer, buffer_u8);

@@ -20,6 +20,10 @@ Models:
 2... - animation: index|frameCycle|samples...
 -----sprites.txt Format-----
 name|frames|type|xOffset|yOffset
+Types: 0 = normal
+	   1 = 4-directional
+	   2 = billboard
+	   3 = 4-directional billboard
 -----model.txt Format-----
 Submodel: 0|submodelID|skin 0 material ID...
 Bodygroup: 1|bodygroupID|model 0 material ID...
@@ -52,7 +56,7 @@ function pn_sprite_queue(_name)
 			//Models (WIP)
 			case (""):
 				//Look in model.txt for model data before loading
-				var _model, _submodels = undefined, _bodygroups = undefined, _type = eModelType._static;
+				var _model = [], _submodels = undefined, _bodygroups = undefined, _type = eModelType._static;
 				
 				//Submodels
 				dataTable = file_text_open_read(mDirSprites + _name + "/model.txt");
@@ -73,6 +77,7 @@ function pn_sprite_queue(_name)
 								_submodel[@ i + 1] = _material;
 								i++;
 							}
+							_submodels[@ array_length(_submodels)] = _submodel;
 						}
 						else
 						{
@@ -85,10 +90,62 @@ function pn_sprite_queue(_name)
 				}
 				file_text_close(dataTable);
 				
+				_model[@ 0] = _submodels;
+				
 				//Bodygroups
+				dataTable = file_text_open_read(mDirSprites + _name + "/model.txt");
+				while !(file_text_eof(dataTable))
+				{
+					var data = string_parse(file_text_read_string(dataTable));
+					if (real(data[0]) == 1)
+					{
+						if (is_undefined(_bodygroups)) _bodygroups = [];
+						var i = 2;
+						repeat (array_length(data) - 2)
+						{
+							var _bodygroup = [], _bodygroupModel = smf_model_load(mDirSprites + _name + "/" + data[1] + "/" + string(i) + ".smf");
+							if (_bodygroupModel == -1)
+							{
+								show_debug_message("!!! PNSprite: Model " + data[i] + " does not exist in bodygroup " + data[1] + " in " + _name);
+								exit
+							}
+							pn_material_queue(data[i]);
+							_bodygroup[@ array_length(_bodygroup)] = _bodygroupModel;
+							_bodygroup[@ array_length(_bodygroup)] = data[i];
+							i++;
+						}
+						_bodygroups[@ array_length(_bodygroups)] = _bodygroup;
+					}
+					file_text_readln(dataTable);
+				}
+				file_text_close(dataTable);
+				
+				_model[@ 1] = _bodygroups;
 				
 				//Animations
-				
+				dataTable = file_text_open_read(mDirSprites + _name + "/model.txt");
+				while !(file_text_eof(dataTable))
+				{
+					var data = string_parse(file_text_read_string(dataTable));
+					if (real(data[0]) == 2)
+					{
+						_type = eModelType.animated;
+						var _animation = [], _animationIndex = smf_animation_load(mDirSprites + _name + "/" + data[1] + ".ani");
+						if (_animationIndex == -1)
+						{
+							show_debug_message("!!! PNSprite: Animation " + data[i] + " does not exist in " + _name);
+							exit
+						}
+						_model[@ array_length(_model)] = _animation;
+					}
+					file_text_readln(dataTable);
+				}
+				file_text_close(dataTable);
+
+				var queueSprite = [_model, _type];
+
+				ds_map_add(global.sprites, _name, queueSprite);
+				show_debug_message("PNSprite: Added " + _name + " (" + string(queueSprite) + ")");
 			break
 			
 			//Sprites

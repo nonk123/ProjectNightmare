@@ -4,7 +4,11 @@ enum eLevel
 	title, debug
 }
 
-enum eRoomData {models, collision, actors, movers, deadActors}
+enum eRoomData {model, collision, actors, movers, deadActors}
+
+enum eActorData {_id, _x, _y, z, _direction, _persistent, tag, special}
+
+enum eMoverData {model, collision, tag}
 
 function pn_level_goto(_levelID)
 {
@@ -25,6 +29,7 @@ function pn_level_transition(_levelID, _transition)
 function pn_level_goto_internal(_levelID)
 {
 	global.level = _levelID;
+	global.levelStart = true;
 	
 	//Remove everything
 	for (var i = 0; i < 2; i++)
@@ -88,6 +93,55 @@ function pn_level_goto_internal(_levelID)
 			instance_create_depth(480, 270, 0, objIntro);
 		break
 	}
+}
+
+function pn_room_goto(_roomID)
+{
+	if !(ds_map_exists(global.levelData, _roomID))
+	{
+		show_debug_message("!!! PNLevel: Room " + string(_roomID) + " does not exist");
+		exit
+	}
 	
-	global.levelStart = true;
+	global.levelRoom = _roomID;
+	
+	with (all) if (object_index != objControl && object_index != rousrDissonance) instance_destroy();
+	ds_list_clear(global.particles);
+	
+	var roomData = global.levelData[? _roomID], i = 0;
+	repeat (ds_list_size(roomData[eRoomData.actors]))
+	{
+		var actor = roomData[eRoomData.actors][| i];
+		
+		//Check if actor is "dead" (destroyed while persistent)
+		if (global.levelStart && actor[eActorData._persistent])
+		{
+			var dead = false;
+			for (var j = 0; j < ds_list_size(roomData[eRoomData.deadActors]); j++) if (i == roomData[eRoomData.deadActors][| j])
+			{
+				dead = true;
+				break
+			}
+			if (dead) continue
+		}
+		
+		//Spawn actor
+		var actorObject;
+		switch (actor[eActorData._id])
+		{
+			default:
+				show_debug_message("!!! PNLevel: Unknown actor ID " + actor[eActorData._id] + " in room " + string(_roomID));
+				continue
+		}
+		with (instance_create_depth(actor[eActorData._x], actor[eActorData._y], 0, actorObject))
+		{
+			z = actor[eActorData.z];
+			faceDirection = actor[eActorData._direction];
+			fPersistent = actor[eActorData._persistent];
+			tag = actor[eActorData.tag];
+			special = actor[eActorData.special];
+		}
+		
+		i++;
+	}
 }

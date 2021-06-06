@@ -17,6 +17,7 @@ frameSample = undefined;
 yaw = 0;
 pitch = 0;
 roll = 0;
+angle = 0;
 scale = 1;
 xScale = 1;
 yScale = 1;

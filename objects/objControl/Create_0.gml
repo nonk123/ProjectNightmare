@@ -30,7 +30,6 @@ GAME SYSTEMS
 ----------*/
 
 //Level
-
 global.level = undefined;
 global.levelRoom = 0;
 global.levelName = "Loading";
@@ -38,20 +37,20 @@ global.levelIcon = "largeicon0";
 global.levelData = ds_map_create();
 global.events = ds_map_create();
 
-//Music
+//Graphics
+global.particles = ds_list_create();
 
+//Music
 global.channel = [FMODGMS_Chan_CreateChannel(), FMODGMS_Chan_CreateChannel()]; //normal, battle
 global.levelMusic = [noone, 1, 1, noone, 0, 0]; //normal, volume, target volume, battle, volume, target volume
 global.battle = false;
 
 //Update loop
-
 global.levelStart = true;
 global.clock = new iota_clock();
 global.clock.set_update_frequency(60);
 
 //Settings
-
 global.bind = undefined;
 global.volume = [1, 1, 0.5]; //master, sound, music
 
@@ -59,5 +58,4 @@ audio_master_gain(global.volume[0] * global.volume[1]);
 for (var i = 0; i < 2; i++) FMODGMS_Chan_Set_Volume(global.channel[i], global.volume[0] * global.volume[2] * global.levelMusic[(i * 3) + 2]);
 
 //Start intro
-
 pn_level_goto(eLevel.logo);

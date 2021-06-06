@@ -1,0 +1,1 @@
+function pn_is_internal_object() { return (object_index == objControl || object_index == rousrDissonance) }

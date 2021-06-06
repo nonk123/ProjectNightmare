@@ -195,6 +195,7 @@
     {"id":{"name":"cast_ray_plane","path":"scripts/cast_ray_plane/cast_ray_plane.yy",},"order":2,},
     {"id":{"name":"rousr_dissonance_handler_on_ready","path":"scripts/rousr_dissonance_handler_on_ready/rousr_dissonance_handler_on_ready.yy",},"order":7,},
     {"id":{"name":"rousrDissonance_event_end_step","path":"scripts/rousrDissonance_event_end_step/rousrDissonance_event_end_step.yy",},"order":4,},
+    {"id":{"name":"pn_internal","path":"scripts/pn_internal/pn_internal.yy",},"order":13,},
     {"id":{"name":"smf_model_load_obj","path":"scripts/smf_model_load_obj/smf_model_load_obj.yy",},"order":31,},
     {"id":{"name":"dq_transform_vector","path":"scripts/dq_transform_vector/dq_transform_vector.yy",},"order":12,},
     {"id":{"name":"rousr_dissonance_handler_on_join","path":"scripts/rousr_dissonance_handler_on_join/rousr_dissonance_handler_on_join.yy",},"order":5,},

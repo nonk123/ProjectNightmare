@@ -13,7 +13,7 @@ enum eMoverData {model, collision, tag}
 function pn_level_goto(_levelID)
 {
 	pn_level_transition(_levelID, eTransition.loading);
-	if (object_index != objControl) instance_destroy();
+	if !(pn_is_internal_object()) instance_destroy();
 }
 
 function pn_level_transition(_levelID, _transition)
@@ -40,7 +40,7 @@ function pn_level_goto_internal(_levelID)
 	global.levelMusic[1] = global.levelMusic[2] = 1;
 	global.levelMusic[4] = global.levelMusic[5] = 0;
 	
-	with (all) if (object_index != objControl && object_index != rousrDissonance) instance_destroy();
+	with (all) if !(pn_is_internal_object()) instance_destroy();
 	
 	//Unload assets
 	repeat (ds_map_size(global.sprites))
@@ -88,11 +88,12 @@ function pn_level_goto_internal(_levelID)
 			pn_font_queue("fntMessage");
 			pn_sound_load("sndCoinIntro");
 			pn_sound_load("sndMarioIntro");
-			pn_music_load("musTitle");
 
 			instance_create_depth(480, 270, 0, objIntro);
 		break
 	}
+	
+	pn_room_goto(0); //All levels must start at room 0
 }
 
 function pn_room_goto(_roomID)

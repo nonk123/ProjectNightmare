@@ -38,6 +38,12 @@ global.levelData = ds_map_create();
 global.events = ds_map_create();
 
 //Graphics
+global.skybox = noone;
+global.skyboxColor = [0, 0, 0];
+global.fogDistance = [0, 65536];
+global.fogColor = c_black;
+global.lightNormal = [-1, 0, -1];
+global.lightColor = c_white;
 global.particles = ds_list_create();
 
 //Music

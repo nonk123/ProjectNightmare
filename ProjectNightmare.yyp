@@ -87,7 +87,6 @@
     {"id":{"name":"colmesh_get_nearest_point","path":"scripts/colmesh_get_nearest_point/colmesh_get_nearest_point.yy",},"order":6,},
     {"id":{"name":"colmesh_read_from_buffer","path":"scripts/colmesh_read_from_buffer/colmesh_read_from_buffer.yy",},"order":9,},
     {"id":{"name":"mat_orthogonalize_up","path":"scripts/mat_orthogonalize_up/mat_orthogonalize_up.yy",},"order":10,},
-    {"id":{"name":"Custom_Sprite_Framework","path":"extensions/Custom_Sprite_Framework/Custom_Sprite_Framework.yy",},"order":2,},
     {"id":{"name":"dq_add_translation","path":"scripts/dq_add_translation/dq_add_translation.yy",},"order":0,},
     {"id":{"name":"rousr_dissonance_create","path":"scripts/rousr_dissonance_create/rousr_dissonance_create.yy",},"order":2,},
     {"id":{"name":"rousrDissonance_event_create","path":"scripts/rousrDissonance_event_create/rousrDissonance_event_create.yy",},"order":3,},

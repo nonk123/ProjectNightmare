@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "Other",
-    "path": "folders/Input/Other.yy",
+    "path": "folders/Scripts/Input/Other.yy",
   },
   "resourceVersion": "1.0",
   "name": "input_consume",

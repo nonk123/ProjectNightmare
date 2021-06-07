@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "Bindings",
-    "path": "folders/Input/Bindings.yy",
+    "path": "folders/Scripts/Input/Bindings.yy",
   },
   "resourceVersion": "1.0",
   "name": "input_binding_set_safe",

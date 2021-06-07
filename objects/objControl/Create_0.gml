@@ -57,7 +57,46 @@ global.clock = new iota_clock();
 global.clock.set_update_frequency(60);
 
 //Settings
-global.bind = undefined;
+enum eBind {up, left, down, right, jump, attack, cameraUp, cameraLeft, cameraDown, cameraRight, zoom, center, pause}
+
+input_default_key(ord("W"), eBind.up);
+input_default_gamepad_axis(gp_axislv, true, eBind.up);
+input_default_key(ord("A"), eBind.left);
+input_default_gamepad_axis(gp_axislh, true, eBind.left);
+input_default_key(ord("S"), eBind.down);
+input_default_gamepad_axis(gp_axislv, false, eBind.down);
+input_default_key(ord("D"), eBind.right);
+input_default_gamepad_axis(gp_axislh, false, eBind.right);
+
+input_default_key(vk_space, eBind.jump);
+input_default_gamepad_button(gp_face1, eBind.jump);
+
+input_default_mouse_button(mb_left, eBind.attack);
+input_default_key(ord("E"), eBind.attack);
+input_default_gamepad_button(gp_shoulderrb, eBind.attack);
+
+input_default_key(vk_up, eBind.cameraUp);
+input_default_gamepad_axis(gp_axisrv, true, eBind.cameraUp);
+input_default_key(vk_left, eBind.cameraLeft);
+input_default_gamepad_axis(gp_axisrh, true, eBind.cameraLeft);
+input_default_key(vk_down, eBind.cameraDown);
+input_default_gamepad_axis(gp_axisrv, false, eBind.cameraDown);
+input_default_key(vk_right, eBind.cameraRight);
+input_default_gamepad_axis(gp_axisrh, false, eBind.cameraRight);
+
+input_default_mouse_button(mb_right, eBind.zoom);
+input_default_key(ord("R"), eBind.zoom);
+input_default_gamepad_button(gp_shoulderlb, eBind.zoom);
+
+input_default_mouse_button(mb_middle, eBind.center);
+input_default_key(ord("Q"), eBind.center);
+input_default_gamepad_button(gp_face2, eBind.center);
+
+input_default_key(vk_escape, eBind.pause);
+input_default_gamepad_button(gp_start, eBind.pause);
+
+global.mouselook = true;
+
 global.volume = [1, 1, 0.5]; //master, sound, music
 
 audio_master_gain(global.volume[0] * global.volume[1]);

@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "(System)",
-    "path": "folders/Input/(System).yy",
+    "path": "folders/Scripts/Input/(System).yy",
   },
   "resourceVersion": "1.0",
   "name": "__input_class_cursor",

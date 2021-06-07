@@ -1,5 +1,7 @@
 /// @description Initialize Game
 
+show_debug_overlay(true);
+
 /*--------
 ASSET MAPS
 --------*/
@@ -94,6 +96,9 @@ input_default_gamepad_button(gp_face2, eBind.center);
 
 input_default_key(vk_escape, eBind.pause);
 input_default_gamepad_button(gp_start, eBind.pause);
+
+input_player_source_set(INPUT_SOURCE.KEYBOARD_AND_MOUSE);
+input_player_gamepad_set(0);
 
 global.mouselook = true;
 

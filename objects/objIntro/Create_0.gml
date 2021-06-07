@@ -94,7 +94,7 @@ global.clock.add_cycle_method(function ()
 	
 		case (10):
 			timer_tick(0);
-			if (keyboard_check_pressed(vk_anykey)) timer[0] = 1;
+			if (input_check_pressed(eBind.jump) || input_check_pressed(eBind.pause)) timer[0] = 1;
 			if !(timer[0]) state = 11;
 		break
 	

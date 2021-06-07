@@ -31,7 +31,7 @@ If you are interested in checking out our development progress, hop on over to o
 
 **fsuarez913** - Super Mario 256
 
-**Juju Adams** - Carton, iota
+**Juju Adams** - Carton, Input, iota
 
 **GMLScripts.com** - scripts
 
@@ -39,7 +39,7 @@ If you are interested in checking out our development progress, hop on over to o
 
 **rousr** - Dissonance
 
-**Snidr** - Snidr's Model Format & ColMesh
+**Snidr** - Snidr's Model Format, ColMesh
 
 
 # DISCLAIMER

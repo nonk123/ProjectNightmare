@@ -100,7 +100,7 @@ global.clock.add_cycle_method(function ()
 	
 		case (11):
 			if (image_alpha > 0) image_alpha -= 0.01;
-			else pn_level_goto(eLevel.logo);
+			else pn_level_goto(eLevel.title);
 		break
 	}
 });

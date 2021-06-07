@@ -102,8 +102,11 @@ input_player_gamepad_set(0);
 
 global.mouselook = true;
 
-global.volume = [1, 1, 0.5]; //master, sound, music
+global.maxFPS = 60;
+game_set_speed(global.maxFPS, gamespeed_fps);
 
+
+global.volume = [1, 1, 0.5]; //master, sound, music
 audio_master_gain(global.volume[0] * global.volume[1]);
 for (var i = 0; i < 2; i++) FMODGMS_Chan_Set_Volume(global.channel[i], global.volume[0] * global.volume[2] * global.levelMusic[(i * 3) + 2]);
 

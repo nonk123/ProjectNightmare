@@ -1,8 +1,6 @@
-enum eLevel
-{
-	logo = -1,
-	title, debug
-}
+#macro mDirLevels "data/levels/"
+
+enum eLevel {logo, title, debug}
 
 enum eRoomData {model, collision, actors, movers, deadActors}
 
@@ -79,6 +77,21 @@ function pn_level_goto_internal(_levelID)
 		ds_map_delete(global.music, track);
 	}
 	
+	//Load level file
+	var levelFile = mDirLevels + string(_levelID) + ".pnl";
+	if (file_exists(levelFile))
+	{
+		var levelCarton = carton_load(levelFile, true);
+		if (levelCarton == -1) show_debug_message("!!! PNLevel: " + string(_levelID) + ".pnl has an invalid file format");
+		else
+		{
+			var levelBuffer = carton_get_buffer(levelCarton, 0);
+			buffer_delete(levelBuffer);
+			carton_destroy(levelCarton);
+		}
+	}
+	else show_debug_message("!!! PNLevel: Level " + string(_levelID) + " not found");
+	
 	//Special level code
 	switch (_levelID)
 	{
@@ -89,7 +102,21 @@ function pn_level_goto_internal(_levelID)
 			pn_sound_load("sndCoinIntro");
 			pn_sound_load("sndMarioIntro");
 
-			instance_create_depth(480, 270, 0, objIntro);
+			instance_create_depth(0, 0, 0, objIntro);
+		break
+		
+		case (eLevel.title):
+			pn_sprite_queue("sprLogo");
+			pn_sprite_queue("sprNNLogo");
+			pn_material_queue("mtlVoid");
+			pn_font_queue("fntMario");
+			pn_sound_load("sndStart");
+			pn_sound_load("sndSelect");
+			pn_sound_load("sndEnter");
+			pn_music_load("musTitle");
+			FMODGMS_Snd_PlaySound(global.music[? "musTitle"], global.channel[0]);
+			
+			instance_create_depth(0, 0, 0, objTitle);
 		break
 	}
 	

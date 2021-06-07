@@ -15,7 +15,7 @@ function carton_load(_filename, _decompress)
 	var _buffer_size = buffer_get_size(_buffer);
 
 	var _header_carton = buffer_read(_buffer, buffer_string);
-	if (_header_carton != "Carton @jujuadams") show_error("Carton:\nInvalid file format\n ", true);
+	if (_header_carton != "Carton @jujuadams") return (-1) //show_error("Carton:\nInvalid file format\n ", true);
 
 	var _layout = [];
 	var _carton = {

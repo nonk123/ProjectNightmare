@@ -1,2 +1,2 @@
 fntMario|12|0|0|!|~
-fntMessage|94|!|1|1
+fntMessage|94|!|1|0

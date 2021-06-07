@@ -1,3 +1,5 @@
 sndCoinIntro|0
 sndMarioIntro|0
-sndCoin|1
+sndStart|0
+sndSelect|0
+sndEnter|0

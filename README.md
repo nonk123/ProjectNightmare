@@ -13,7 +13,7 @@ If you are interested in checking out our development progress, hop on over to o
 # CREDITS
 ### [TEAM NIGHTMARE]
 
-**Can't Sleep** - lead developer, graphics design, programming
+**Can't Sleep** - lead developer, graphics design, programming, sound mixing
 
 **Furret78, JUE13, LooPeR231, ReflexGURU** - beta testing
 

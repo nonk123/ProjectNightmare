@@ -51,6 +51,7 @@ else
 			var getMenu = options[menu[0]], menuSize = array_length(getMenu), i = 0;
 			repeat (menuSize)
 			{
+				if (option[0] == i && timer[1] >= 0 && (current_time) mod (100) < 50) continue
 				var getOption = getMenu[i];
 				draw_set_color((option[0] == i) ? merge_color(c_pn_red, c_white, abs(dsin(current_time * 0.2))) : (getOption.isDisabled ? c_gray : c_pn_red));
 				draw_text_transformed(lerp(-499.5, 64, animation_smooth) + i * 10 + getOption.xOffset, 256 + i * 36, getOption.label, 2, 2, 0);

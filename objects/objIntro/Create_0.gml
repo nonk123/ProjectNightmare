@@ -89,7 +89,7 @@ global.clock.add_cycle_method(function ()
 		break
 	
 		case (9):
-			timer[0] = 300;
+			timer[0] = 150;
 			state = 10;
 		break
 	

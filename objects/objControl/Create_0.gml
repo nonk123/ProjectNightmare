@@ -1,6 +1,7 @@
 /// @description Initialize Game
 
 show_debug_overlay(true);
+draw_set_circle_precision(32);
 
 /*--------
 ASSET MAPS
@@ -50,17 +51,29 @@ global.particles = ds_list_create();
 
 //Music
 global.channel = [FMODGMS_Chan_CreateChannel(), FMODGMS_Chan_CreateChannel()]; //normal, battle
-global.levelMusic = [noone, 1, 1, noone, 0, 0]; //normal, volume, target volume, battle, volume, target volume
+global.levelMusic = [noone, 1, 1, 1, 0, noone, 0, 0, 0, 0]; //normal, volume, volume start, volume end, time, battle, volume, volume start, volume end, time
 global.battle = false;
 
 //Update loop
+timer_create();
 global.levelStart = true;
 global.clock = new iota_clock();
 global.clock.set_update_frequency(60);
 global.clock.add_cycle_method(function ()
 {
+	//Update input
 	input_player_source_set(gamepad_is_connected(0) ? INPUT_SOURCE.GAMEPAD : INPUT_SOURCE.KEYBOARD_AND_MOUSE);
 	input_tick();
+	
+	//Update music volume
+	for (var i = 0; i < 2; i++) if (timer[i] >= 0)
+	{
+		var slot = i * 5;
+		global.levelMusic[slot + 1] = lerp(global.levelMusic[slot + 2], global.levelMusic[slot + 3], (global.levelMusic[slot + 4] - timer[i]) / global.levelMusic[slot + 4]);
+		FMODGMS_Chan_Set_Volume(global.channel[i], global.levelMusic[slot + 1]);
+		timer_tick(i);
+		show_debug_message(string(global.levelMusic[slot + 1]));
+	}
 });
 
 //Settings

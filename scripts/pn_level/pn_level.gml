@@ -16,7 +16,7 @@ function pn_level_goto(_levelID)
 
 function pn_level_transition(_levelID, _transition)
 {
-	if (instance_exists(objTransition)) exit
+	if (_transition != eTransition.loading && instance_exists(objTransition)) exit
 	with (instance_create_depth(0, 0, -1, objTransition))
 	{
 		transition = _transition;
@@ -44,11 +44,11 @@ function pn_level_goto_internal(_levelID)
 	{
 		FMODGMS_Chan_StopChannel(global.channel[i]);
 		FMODGMS_Chan_Set_Volume(global.channel[i], 1 - i);
+		var slot = i * 5;
+		global.levelMusic[slot + 1] = 1 - i;
+		global.levelMusic[slot + 2] = 1 - i;
+		objControl.timer[i] = -65536;
 	}
-	global.levelMusic[1] = 1;
-	global.levelMusic[2] = 1;
-	global.levelMusic[4] = 0;
-	global.levelMusic[5] = 0;
 	
 	with (all) if !(pn_is_internal_object()) instance_destroy();
 	

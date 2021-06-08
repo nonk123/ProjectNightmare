@@ -133,6 +133,7 @@
     {"id":{"name":"input_distance","path":"scripts/input_distance/input_distance.yy",},"order":1,},
     {"id":{"name":"FMODGMS_Util_SamplesToBeats","path":"scripts/FMODGMS_Util_SamplesToBeats/FMODGMS_Util_SamplesToBeats.yy",},"order":5,},
     {"id":{"name":"dq_rotate","path":"scripts/dq_rotate/dq_rotate.yy",},"order":10,},
+    {"id":{"name":"pn_music","path":"scripts/pn_music/pn_music.yy",},"order":16,},
     {"id":{"name":"__input_class_player","path":"scripts/__input_class_player/__input_class_player.yy",},"order":5,},
     {"id":{"name":"mat_create_fr","path":"scripts/mat_create_fr/mat_create_fr.yy",},"order":1,},
     {"id":{"name":"rousr_dissonance_set_timestamps","path":"scripts/rousr_dissonance_set_timestamps/rousr_dissonance_set_timestamps.yy",},"order":18,},

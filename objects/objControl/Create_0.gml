@@ -57,6 +57,11 @@ global.battle = false;
 global.levelStart = true;
 global.clock = new iota_clock();
 global.clock.set_update_frequency(60);
+global.clock.add_cycle_method(function ()
+{
+	input_player_source_set(gamepad_is_connected(0) ? INPUT_SOURCE.GAMEPAD : INPUT_SOURCE.KEYBOARD_AND_MOUSE);
+	input_tick();
+});
 
 //Settings
 enum eBind {up, left, down, right, jump, attack, cameraUp, cameraLeft, cameraDown, cameraRight, zoom, center, pause}

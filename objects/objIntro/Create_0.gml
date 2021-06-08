@@ -4,6 +4,7 @@ wobble = 0;
 state = 0;
 image_xscale = 0;
 image_alpha = 0;
+timer_create();
 
 //Animation control
 global.clock.variable_interpolate("image_xscale", "image_xscale_smooth");
@@ -19,7 +20,7 @@ global.clock.add_cycle_method(function ()
 	    break
 	
 	    case (1):
-	        //Tick down the timer before the logo appears.
+	        //Tick down the timer before the logo appears
 	        if (timer_tick(0))
 	        {
 	            audio_play_sound(global.sounds[? "sndCoinIntro"][0], 1, false);
@@ -94,7 +95,7 @@ global.clock.add_cycle_method(function ()
 	
 		case (10):
 			timer_tick(0);
-			if (input_check_pressed(eBind.jump) || input_check_pressed(eBind.pause)) timer[0] = 1;
+			if (pn_input_pressed_any()) timer[0] = 1;
 			if !(timer[0]) state = 11;
 		break
 	
@@ -103,4 +104,5 @@ global.clock.add_cycle_method(function ()
 			else pn_level_goto(eLevel.title);
 		break
 	}
+	if (input_check_pressed(eBind.pause)) pn_level_goto(eLevel.title);
 });

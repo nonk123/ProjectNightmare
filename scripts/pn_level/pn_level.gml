@@ -17,10 +17,20 @@ function pn_level_goto(_levelID)
 function pn_level_transition(_levelID, _transition)
 {
 	if (instance_exists(objTransition)) exit
-	with (instance_create_depth(0, 0, 0, objTransition))
+	with (instance_create_depth(0, 0, -1, objTransition))
 	{
 		transition = _transition;
 		goto = _levelID;
+	}
+}
+
+function pn_level_transition_start(_transition)
+{
+	if (instance_exists(objTransition)) exit
+	with (instance_create_depth(0, 0, -1, objTransition))
+	{
+		transition = _transition;
+		reverse = true;
 	}
 }
 
@@ -35,8 +45,10 @@ function pn_level_goto_internal(_levelID)
 		FMODGMS_Chan_StopChannel(global.channel[i]);
 		FMODGMS_Chan_Set_Volume(global.channel[i], 1 - i);
 	}
-	global.levelMusic[1] = global.levelMusic[2] = 1;
-	global.levelMusic[4] = global.levelMusic[5] = 0;
+	global.levelMusic[1] = 1;
+	global.levelMusic[2] = 1;
+	global.levelMusic[4] = 0;
+	global.levelMusic[5] = 0;
 	
 	with (all) if !(pn_is_internal_object()) instance_destroy();
 	
@@ -108,6 +120,7 @@ function pn_level_goto_internal(_levelID)
 		case (eLevel.title):
 			pn_sprite_queue("sprLogo");
 			pn_sprite_queue("sprNNLogo");
+			pn_sprite_queue("sprSidebar");
 			pn_material_queue("mtlVoid");
 			pn_font_queue("fntMario");
 			pn_sound_load("sndStart");
@@ -116,6 +129,7 @@ function pn_level_goto_internal(_levelID)
 			pn_music_load("musTitle");
 			FMODGMS_Snd_PlaySound(global.music[? "musTitle"], global.channel[0]);
 			
+			pn_level_transition_start(eTransition.circle2);
 			instance_create_depth(0, 0, 0, objTitle);
 		break
 	}

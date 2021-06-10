@@ -48,17 +48,52 @@ else
 		break
 		
 		default:
-			var getMenu = options[menu[0]], menuSize = array_length(getMenu), i = 0;
+			var getMenu = options[0][menu[0]], menuSize = array_length(getMenu), i = 0;
 			repeat (menuSize)
 			{
-				if (option[0] == i && timer[1] >= 0 && (current_time) mod (100) < 50) continue
 				var getOption = getMenu[i];
-				draw_set_color((option[0] == i) ? merge_color(c_pn_red, c_white, abs(dsin(current_time * 0.2))) : (getOption.isDisabled ? c_gray : c_pn_red));
+				if (is_undefined(getOption) || (option[0] == i && timer[1] >= 0 && (current_time) mod (100) < 50))
+				{
+					i++;
+					continue
+				}
+				draw_set_color((!isInSubmenu && option[0] == i) ? merge_color(c_pn_red, c_white, abs(dsin(current_time * 0.2))) : (getOption.isDisabled ? c_gray : c_pn_red));
 				draw_text_transformed(lerp(-499.5, 64, animation_smooth) + i * 10 + getOption.xOffset, 256 + i * 36, getOption.label, 2, 2, 0);
 				i++;
 			}
 			draw_set_color(c_white);
 	}
+	
+	draw_set_alpha(0.5);
+	draw_set_color(c_dkgray);
+	draw_rectangle(camSize[0] - 510 + submenuX_smooth, 96, camSize[0] + submenuX_smooth, 444, false);
+	draw_set_color(c_white);
+	draw_set_alpha(1);
+	
+	var submenuLabel = "Controls";
+	switch (menu[1])
+	{
+		case (eSubmenu.graphics): submenuLabel = "Graphics"; break
+		case (eSubmenu.sounds): submenuLabel = "Sounds"; break
+	}
+	draw_text_transformed(camSize[0] - 480 + submenuX_smooth, 80, submenuLabel, 2, 2, 0);
+	
+	var getMenu = options[1][menu[1]], i = 0;
+	repeat (array_length(getMenu))
+	{
+		var getOption = getMenu[i];
+		if (is_undefined(getOption))
+		{
+			i++;
+			continue
+		}
+		draw_set_color((isInSubmenu && option[1] == i) ? merge_color(c_pn_red, c_white, abs(dsin(current_time * 0.2))) : (getOption.isDisabled ? c_gray : c_pn_red));
+		var optionLabel = getOption.label;
+		if !(is_undefined(getOption.state)) optionLabel += ": " + getOption.state;
+		draw_text_transformed(camSize[0] - 502 + submenuX_smooth, 144 + i * 36, optionLabel, 2, 2, 0);
+		i++;
+	}
+	draw_set_color(c_white);
 	
 	draw_set_alpha(image_alpha_smooth);
 	draw_rectangle(0, 0, camSize[0], camSize[1], false);

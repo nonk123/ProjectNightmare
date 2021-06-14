@@ -406,7 +406,6 @@
     {"CopyToMask":-1,"filePath":"datafiles/data/gfx/materials","resourceVersion":"1.0","name":"mtlVoid.png","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/data/gfx/sprites","resourceVersion":"1.0","name":"sprSidebar.png","resourceType":"GMIncludedFile",},
     {"CopyToMask":153157610357391598,"filePath":"datafiles","resourceVersion":"1.0","name":"example.webm","resourceType":"GMIncludedFile",},
-    {"CopyToMask":-1,"filePath":"datafiles/data","resourceVersion":"1.0","name":"trailer.webm","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.2.560",

@@ -26,7 +26,7 @@ options =
 			{
 				audio_play_sound(global.sounds[? "sndSelect"][0], 1, false);
 				menu[0] = eMenu.play;
-				option[0] = options[eMenu.play][0].isDisabled;
+				option[0] = options[0][eMenu.play][0].isDisabled;
 			}, undefined, false),
 			new pn_option("Options", false, function()
 			{

@@ -1,6 +1,6 @@
 #macro mDirLevels "data/levels/"
 
-enum eLevel {logo, title, debug}
+enum eLevel {logo, title, trailer, debug}
 
 enum eRoomData {model, collision, actors, movers, deadActors}
 
@@ -132,6 +132,8 @@ function pn_level_goto_internal(_levelID)
 			pn_level_transition_start(eTransition.circle2);
 			instance_create_depth(0, 0, 0, objTitle);
 		break
+		
+		case (eLevel.trailer): instance_create_depth(0, 0, 0, objTrailer); break
 	}
 	
 	pn_room_goto(0); //All levels must start at room 0

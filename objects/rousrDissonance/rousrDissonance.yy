@@ -27,7 +27,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Dissonance",
-    "path": "folders/Objects/Dissonance.yy",
+    "path": "folders/Objects/Internal/Dissonance.yy",
   },
   "resourceVersion": "1.0",
   "name": "rousrDissonance",

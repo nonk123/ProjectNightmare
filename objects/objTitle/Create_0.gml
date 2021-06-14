@@ -147,6 +147,7 @@ global.clock.add_cycle_method(function ()
 				image_alpha = 1;
 				image_alpha_smooth = 1;
 				timer[0] = -65536;
+				timer[2] = 60;
 				animation = 0;
 				animation_smooth = 0;
 				menu[0] = eMenu.start;
@@ -154,13 +155,21 @@ global.clock.add_cycle_method(function ()
 		break
 		
 		case (eMenu.start):
-			if (timer[0] == -65536 && pn_input_pressed_any())
+			if !(instance_exists(objTransition))
 			{
-				audio_play_sound(global.sounds[? "sndStart"][0], 1, false);
-				image_alpha = 0.25;
-				timer[0] = 80;
+				if (timer[0] == -65536 && pn_input_pressed_any())
+				{
+					audio_play_sound(global.sounds[? "sndStart"][0], 1, false);
+					image_alpha = 0.25;
+					timer[0] = 80;
+				}
+				if (timer_tick(0)) menu[0] = eMenu.main;
 			}
-			if (timer_tick(0)) menu[0] = eMenu.main;
+			if (timer[0] == -65536 && timer_tick(2) && file_exists("data/trailer.webm"))
+			{
+				pn_level_transition(eLevel.trailer, eTransition.fade);
+				pn_music_gain(0, 0, 120);
+			}
 		break
 
 	}

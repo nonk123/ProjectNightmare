@@ -27,8 +27,6 @@ If you are interested in checking out our development progress, hop on over to o
 
 ### [THIRD-PARTIES]
 
-**Braffolk** - Custom Sprite Framework
-
 **fsuarez913** - Super Mario 256
 
 **Juju Adams** - Carton, Input, iota
@@ -38,6 +36,8 @@ If you are interested in checking out our development progress, hop on over to o
 **M.S.T.O.P.** - FMODGMS
 
 **rousr** - Dissonance
+
+**Samuel Venable** - WebM Player
 
 **Snidr** - Snidr's Model Format, ColMesh
 

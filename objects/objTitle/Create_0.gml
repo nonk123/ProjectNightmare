@@ -147,7 +147,7 @@ global.clock.add_cycle_method(function ()
 				image_alpha = 1;
 				image_alpha_smooth = 1;
 				timer[0] = -65536;
-				timer[2] = 60;
+				timer[2] = 1800;
 				animation = 0;
 				animation_smooth = 0;
 				menu[0] = eMenu.start;

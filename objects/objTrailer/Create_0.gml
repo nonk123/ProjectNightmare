@@ -1,4 +1,5 @@
 /// @description Load Video
+game_set_speed(30, gamespeed_fps);
 isPlaying = false;
 v = video_add("data/trailer.webm");
 video_play(v);
@@ -14,9 +15,3 @@ buffer_poke(buff, buffer_get_size(buff) - 1, buffer_u8, 0);
 
 // fixes window close button on unix-likes with kwin/kde.
 window_set_size(window_get_width(), window_get_height());
-
-global.clock.add_cycle_method(function ()
-{
-	if (video_is_playing(v)) video_grab_frame_buffer(v, buffer_get_address(buff)); // video takes roughly 1 step to load before playing
-	else pn_level_goto(eLevel.title);
-});

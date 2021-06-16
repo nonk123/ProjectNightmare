@@ -254,6 +254,7 @@
     {"id":{"name":"input_rebind_tick_legacy","path":"scripts/input_rebind_tick_legacy/input_rebind_tick_legacy.yy",},"order":3,},
     {"id":{"name":"input_check","path":"scripts/input_check/input_check.yy",},"order":0,},
     {"id":{"name":"input_gamepad_check_pressed","path":"scripts/input_gamepad_check_pressed/input_gamepad_check_pressed.yy",},"order":1,},
+    {"id":{"name":"objLoading","path":"objects/objLoading/objLoading.yy",},"order":4,},
     {"id":{"name":"dq_create_identity","path":"scripts/dq_create_identity/dq_create_identity.yy",},"order":3,},
     {"id":{"name":"extRousrDissonance","path":"extensions/extRousrDissonance/extRousrDissonance.yy",},"order":0,},
     {"id":{"name":"mat_invert","path":"scripts/mat_invert/mat_invert.yy",},"order":5,},
@@ -405,7 +406,7 @@
     {"CopyToMask":-1,"filePath":"datafiles/data/gfx/sprites","resourceVersion":"1.0","name":"sprNNLogo.png","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/data/gfx/materials","resourceVersion":"1.0","name":"mtlVoid.png","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/data/gfx/sprites","resourceVersion":"1.0","name":"sprSidebar.png","resourceType":"GMIncludedFile",},
-    {"CopyToMask":153157610357391598,"filePath":"datafiles","resourceVersion":"1.0","name":"example.webm","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data","resourceVersion":"1.0","name":"trailer.webm","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.2.560",

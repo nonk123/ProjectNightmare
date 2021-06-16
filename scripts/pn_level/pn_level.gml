@@ -8,18 +8,15 @@ enum eActorData {_id, _x, _y, z, _direction, _persistent, tag, special}
 
 enum eMoverData {model, collision, tag}
 
-function pn_level_goto(_levelID)
-{
-	pn_level_transition(_levelID, eTransition.loading);
-	if !(pn_is_internal_object()) instance_destroy();
-}
+function pn_level_goto(_levelID) { instance_create_depth(0, 0, -1, objLoading).goto = _levelID; }
 
 function pn_level_transition(_levelID, _transition)
 {
-	if (_transition != eTransition.loading && instance_exists(objTransition)) exit
+	if (instance_exists(objTransition)) exit
 	with (instance_create_depth(0, 0, -1, objTransition))
 	{
 		transition = _transition;
+		pn_transition_set_timer();
 		goto = _levelID;
 	}
 }
@@ -30,6 +27,7 @@ function pn_level_transition_start(_transition)
 	with (instance_create_depth(0, 0, -1, objTransition))
 	{
 		transition = _transition;
+		pn_transition_set_timer();
 		reverse = true;
 	}
 }

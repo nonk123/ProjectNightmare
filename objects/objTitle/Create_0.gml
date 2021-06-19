@@ -3,7 +3,7 @@
 enum eMenu {intro, start, main, play, options}
 enum eSubmenu {controls, graphics, sounds}
 
-menu = [eMenu.intro, eSubmenu.controls]; //menu, submenu
+menu = [global.gameStart ? eMenu.intro : eMenu.start, eSubmenu.controls]; //menu, submenu
 
 function pn_option(_name, _disabled, _function, _unlockCondition, _state) constructor
 {
@@ -121,7 +121,7 @@ checkBind = false;
 leaveTitle = undefined;
 
 timer_create();
-timer[0] = 450;
+timer[0] = global.gameStart ? 450 : -65536;
 animation = 0;
 image_alpha = 0;
 menuY = 0;
@@ -151,6 +151,7 @@ global.clock.add_cycle_method(function ()
 				animation = 0;
 				animation_smooth = 0;
 				menu[0] = eMenu.start;
+				global.gameStart = false;
 			}
 		break
 		

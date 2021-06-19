@@ -31,7 +31,8 @@ Animation: 2|animationID|frameCycle|frames
 Frame cycles: 0 = linear
 			  1 = linear, loop
 			  2 = quadratic
-			  3 = quadratic, loop*/
+			  3 = quadratic, loop
+NOTE: Loading a model will also load the materials used by it.*/
 
 #macro mDirSprites "data/gfx/sprites/"
 

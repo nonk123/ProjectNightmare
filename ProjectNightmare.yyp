@@ -407,6 +407,8 @@
     {"CopyToMask":-1,"filePath":"datafiles/data/gfx/materials","resourceVersion":"1.0","name":"mtlVoid.png","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/data/gfx/sprites","resourceVersion":"1.0","name":"sprSidebar.png","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/data","resourceVersion":"1.0","name":"trailer.webm","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/gfx/sprites","resourceVersion":"1.0","name":"sprPauseMario.png","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/sfx/sounds","resourceVersion":"1.0","name":"sndPause.ogg","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.2.560",

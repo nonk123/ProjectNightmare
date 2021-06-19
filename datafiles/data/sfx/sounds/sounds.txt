@@ -3,3 +3,4 @@ sndMarioIntro|0
 sndStart|0
 sndSelect|0
 sndEnter|0
+sndPause|0

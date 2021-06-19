@@ -27,6 +27,8 @@ If you are interested in checking out our development progress, hop on over to o
 
 ### [THIRD-PARTIES]
 
+**DragoniteSpam** - Emu (PNE)
+
 **fsuarez913** - Super Mario 256
 
 **Juju Adams** - Carton, Input, iota
@@ -37,7 +39,7 @@ If you are interested in checking out our development progress, hop on over to o
 
 **rousr** - Dissonance
 
-**Samuel Venable** - WebM Player
+**Samuel Venable** - Execute Shell (PNE), WebM Player
 
 **Snidr** - Snidr's Model Format, ColMesh
 
@@ -48,5 +50,4 @@ This is an unofficial non-profit fan game. It is open-sourced and freeware, and 
 We do not hold any licenses nor copyrights. This game must NOT be sold.
 "If somebody sold you that game, please call the nearest government police station, and pray they dont work for Bill Gates" (sic)
 
-**Mario, Link & other related characters © Nintendo**
-**FMOD © Firelight Technologies**
+**Mario, Link & other related characters © Nintendo	• FMOD © Firelight Technologies**

@@ -1,6 +1,9 @@
-sndCoinIntro|0
-sndMarioIntro|0
-sndStart|0
-sndSelect|0
-sndEnter|0
-sndPause|0
+sndCoinIntro
+sndMarioIntro
+sndStart
+sndSelect
+sndEnter
+sndPause
+sndMessageOpen
+sndMessage
+sndMessageClose

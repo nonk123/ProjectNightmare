@@ -70,7 +70,7 @@ global.clock.add_cycle_method(function ()
 	{
 		var slot = i * 5;
 		global.levelMusic[slot + 1] = lerp(global.levelMusic[slot + 2], global.levelMusic[slot + 3], (global.levelMusic[slot + 4] - timer[i]) / global.levelMusic[slot + 4]);
-		FMODGMS_Chan_Set_Volume(global.channel[i], global.levelMusic[slot + 1]);
+		FMODGMS_Chan_Set_Volume(global.channel[i], (global.volume[0] * global.volume[2]) * global.levelMusic[slot + 1]);
 		timer_tick(i);
 		show_debug_message(string(global.levelMusic[slot + 1]));
 	}
@@ -126,7 +126,11 @@ game_set_speed(global.maxFPS, gamespeed_fps);
 
 global.volume = [1, 1, 0.5]; //master, sound, music
 audio_master_gain(global.volume[0] * global.volume[1]);
-for (var i = 0; i < 2; i++) FMODGMS_Chan_Set_Volume(global.channel[i], global.volume[0] * global.volume[2] * global.levelMusic[(i * 3) + 2]);
+for (var i = 0; i < 2; i++) FMODGMS_Chan_Set_Volume(global.channel[i], (global.volume[0] * global.volume[2]) * global.levelMusic[(i * 3) + 2]);
+
+global.gameStart = true;
+
+global.lockPlayer = false;
 
 //Start intro
 pn_level_goto(eLevel.logo);

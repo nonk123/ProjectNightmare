@@ -38,10 +38,11 @@ function pn_level_goto_internal(_levelID)
 	global.levelStart = true;
 	
 	//Remove everything
+	
 	for (var i = 0; i < 2; i++)
 	{
 		FMODGMS_Chan_StopChannel(global.channel[i]);
-		FMODGMS_Chan_Set_Volume(global.channel[i], 1 - i);
+		FMODGMS_Chan_Set_Volume(global.channel[i], (global.volume[0] * global.volume[2]) * (1 - i));
 		var slot = i * 5;
 		global.levelMusic[slot + 1] = 1 - i;
 		global.levelMusic[slot + 2] = 1 - i;
@@ -49,6 +50,8 @@ function pn_level_goto_internal(_levelID)
 	}
 	
 	with (all) if !(pn_is_internal_object()) instance_destroy();
+	
+	ds_list_clear(global.events);
 	
 	//Unload assets
 	repeat (ds_map_size(global.sprites))
@@ -95,12 +98,92 @@ function pn_level_goto_internal(_levelID)
 		if (levelCarton == -1) show_debug_message("!!! PNLevel: " + string(_levelID) + ".pnl has an invalid file format");
 		else
 		{
-			var levelBuffer = carton_get_buffer(levelCarton, 0);
-			buffer_delete(levelBuffer);
+			var currentLevelBuffer = carton_get_buffer(levelCarton, 0);
+			
+			//Level information
+			global.levelName = buffer_read(currentLevelBuffer, buffer_string);
+			global.levelIcon = buffer_read(currentLevelBuffer, buffer_string);
+			
+			rousr_dissonance_set_details(global.levelName);
+			rousr_dissonance_set_large_image(global.levelIcon);
+			
+			for (var i = 0; i < 6; i += 5)
+			{
+				global.levelMusic[i] = buffer_read(currentLevelBuffer, buffer_string);
+				if (global.levelMusic[i] == "") global.levelMusic[i] = noone;
+				else pn_music_load(global.levelMusic[i]);
+			}
+			
+			global.skybox = buffer_read(currentLevelBuffer, buffer_string);
+			if (global.skybox == "") global.skybox = noone;
+			else pn_material_queue(global.skybox);
+			
+			for (var i = 0; i < 3; i++) global.skyboxColor[i] = buffer_read(currentLevelBuffer, buffer_u8);
+			for (var i = 0; i < 2; i++) global.fogDistance[i] = buffer_read(currentLevelBuffer, buffer_u32);
+			for (var i = 0; i < 4; i++) global.fogColor[i] = buffer_read(currentLevelBuffer, buffer_u8);
+			for (var i = 0; i < 3; i++) global.lightNormal[i] = buffer_read(currentLevelBuffer, buffer_s8);
+			for (var i = 0; i < 4; i++) global.lightColor[i] = buffer_read(currentLevelBuffer, buffer_u8);
+			for (var i = 0; i < 4; i++) global.lightAmbientColor[i] = buffer_read(currentLevelBuffer, buffer_u8);
+			
+			var events = buffer_read(currentLevelBuffer, buffer_u16), rooms = buffer_read(currentLevelBuffer, buffer_u16);
+			
+			buffer_delete(currentLevelBuffer);
+			
+			//Events
+			show_debug_message(string(events) + " events found");
+			for (var i = 1, n = events + 1; i < n; i++)
+			{
+				var loadEvent = ds_list_create(), j = 3;
+				
+				currentLevelBuffer = carton_get_buffer(levelCarton, i);
+				
+				for (var j = 0; j < 2; j++) ds_list_add(loadEvent, buffer_read(currentLevelBuffer, buffer_u8));
+				repeat (buffer_read(currentLevelBuffer, buffer_u16))
+				{
+					var actionData = string_parse(buffer_read(currentLevelBuffer, buffer_string), true), eventAction, actionArgs = array_length(actionData), j = 0;
+					if (actionArgs == 1) eventAction = actionData[0]; //Action has no arguments, therefore a string
+					else
+					{
+						eventAction = [];
+						repeat (actionArgs)
+						{
+							eventAction[@ array_length(eventAction)] = actionData[j];
+							j++;
+						}
+					}
+					ds_list_add(loadEvent, eventAction);
+				}
+				
+				buffer_delete(currentLevelBuffer);
+				
+				var eventID = carton_get_metadata(levelCarton, i);
+				show_debug_message(string(i) + "/" + string(n - 1) + ", ID " + eventID + ", " + string(ds_list_size(loadEvent)) + " actions");
+				ds_map_add_list(global.events, real(eventID), loadEvent);
+			}
+			
+			//Event assets
+			var actions = pn_event_find_actions(eEventAction.setSkyboxTexture), i = 0;
+			repeat (array_length(actions))
+			{
+				pn_material_queue(actions[i][1]);
+				i++;
+			}
+			
+			if (array_length(pn_event_find_actions(eEventAction._message)))
+			{
+				pn_font_queue("fntMessage");
+				pn_sound_load("sndMessageOpen");
+				pn_sound_load("sndMessage");
+				pn_sound_load("sndMessageClose");
+			}
+			
 			carton_destroy(levelCarton);
 		}
 	}
 	else show_debug_message("!!! PNLevel: Level " + string(_levelID) + " not found");
+	
+	//Start music
+	for (var i = 0; i < 6; i += 5) if (global.levelMusic[i] != noone) FMODGMS_Snd_PlaySound(global.music[? global.levelMusic[i]], global.channel[i == 5]);
 	
 	//Special level code
 	switch (_levelID)
@@ -125,7 +208,6 @@ function pn_level_goto_internal(_levelID)
 			pn_sound_load("sndSelect");
 			pn_sound_load("sndEnter");
 			pn_music_load("musTitle");
-			FMODGMS_Snd_PlaySound(global.music[? "musTitle"], global.channel[0]);
 			
 			pn_level_transition_start(eTransition.circle2);
 			instance_create_depth(0, 0, 0, objTitle);
@@ -135,6 +217,9 @@ function pn_level_goto_internal(_levelID)
 	}
 	
 	pn_room_goto(0); //All levels must start at room 0
+	
+	//Activate events that are flagged to trigger on level start
+	for (var key = ds_map_find_first(global.events); !is_undefined(key); key = ds_map_find_next(global.events, key)) if (global.events[? key][| 0]) pn_event_create(key);
 }
 
 function pn_room_goto(_roomID)
@@ -147,7 +232,16 @@ function pn_room_goto(_roomID)
 	
 	global.levelRoom = _roomID;
 	
-	with (all) if (object_index != objControl && object_index != rousrDissonance) instance_destroy();
+	with (all) switch (object_index)
+	{
+		case (objControl):
+		case (rousrDissonance): continue break
+		
+		case (objEventHandler): if !(eventList[| 1]) instance_destroy(); break
+		
+		default: instance_destroy();
+	}
+	
 	ds_list_clear(global.particles);
 	
 	var roomData = global.levelData[? _roomID], i = 0;

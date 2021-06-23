@@ -116,7 +116,11 @@ function pn_level_goto_internal(_levelID)
 			
 			global.skybox = buffer_read(currentLevelBuffer, buffer_string);
 			if (global.skybox == "") global.skybox = noone;
-			else pn_material_queue(global.skybox);
+			else
+			{
+				pn_sprite_queue("sprSkybox");
+				pn_material_queue(global.skybox);
+			}
 			
 			for (var i = 0; i < 3; i++) global.skyboxColor[i] = buffer_read(currentLevelBuffer, buffer_u8);
 			for (var i = 0; i < 2; i++) global.fogDistance[i] = buffer_read(currentLevelBuffer, buffer_u32);

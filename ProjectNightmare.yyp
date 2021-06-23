@@ -419,6 +419,8 @@
     {"CopyToMask":-1,"filePath":"datafiles/data/sfx/sounds","resourceVersion":"1.0","name":"sndMessage.ogg","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/data/levels","resourceVersion":"1.0","name":"1.pnl","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/data/levels","resourceVersion":"1.0","name":"3.pnl","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/gfx/sprites/sprSkybox","resourceVersion":"1.0","name":"0.smf","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/gfx/sprites/sprSkybox","resourceVersion":"1.0","name":"model.txt","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.2.560",

@@ -22,6 +22,7 @@ scale = 1;
 xScale = 1;
 yScale = 1;
 zScale = 1;
+alpha = 1;
 emitter = audio_emitter_create();
 
 //Physics
@@ -65,8 +66,6 @@ global.clock.variable_interpolate("y", "y_smooth");
 global.clock.variable_interpolate("z", "z_smooth");
 draw = function()
 {
-	if !(fVisible) exit
-	
 	var _frame, _yaw, _pitch, _roll, _x, _y, _z;
 	if (fSmooth)
 	{

@@ -244,10 +244,11 @@ function pn_room_goto(_roomID)
 	
 	ds_list_clear(global.particles);
 	
-	var roomData = global.levelData[? _roomID], i = 0;
-	repeat (ds_list_size(roomData[eRoomData.actors]))
+	var roomActors = global.levelData[? _roomID][eRoomData.actors], i = 0;
+	if (is_undefined(roomActors)) exit
+	repeat (array_length(roomActors))
 	{
-		var actor = roomData[eRoomData.actors][| i];
+		var actor = roomActors[i];
 		
 		//Check if actor is "dead" (destroyed while persistent)
 		if (global.levelStart && actor[eActorData._persistent])
@@ -258,7 +259,11 @@ function pn_room_goto(_roomID)
 				dead = true;
 				break
 			}
-			if (dead) continue
+			if (dead)
+			{
+				i++;
+				continue
+			}
 		}
 		
 		//Spawn actor

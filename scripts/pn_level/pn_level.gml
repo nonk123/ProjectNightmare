@@ -51,13 +51,41 @@ function pn_level_goto_internal(_levelID)
 	
 	with (all) if !(pn_is_internal_object()) instance_destroy();
 	
-	ds_list_clear(global.events);
+	ds_map_clear(global.events);
 	
 	//Unload assets
+	if !(is_undefined(global.skybox[1]))
+	{
+		vertex_delete_buffer(global.skybox[1]);
+		global.skybox[1] = undefined;
+	}
 	repeat (ds_map_size(global.sprites))
 	{
 		var sprite = ds_map_find_first(global.sprites), getSprite = global.sprites[? sprite][0];
-		if !(is_array(getSprite)) sprite_delete(getSprite);
+		if (is_array(getSprite))
+		{
+			var submodels = getSprite[0], bodygroups = getSprite[1], i = 0;
+			repeat (array_length(submodels))
+			{
+				vertex_delete_buffer(submodels[i][0]);
+				i++;
+			}
+			repeat (array_length(bodygroups))
+			{
+				var getBodygroup = bodygroups[i], j = 0;
+				repeat (array_length(getBodygroup) * 0.5)
+				{
+					vertex_delete_buffer(getBodygroup[j]);
+					j += 2;
+				}
+				i++;
+			}
+			ds_list_clear(SMF_bindList);
+			ds_list_clear(SMF_bindLocalList);
+			for (var i = 0; i < ds_list_size(SMF_frameList); i++) ds_grid_destroy(SMF_frameList[| i]);
+			ds_list_clear(SMF_frameList);
+		}
+		else sprite_delete(getSprite);
 		ds_map_delete(global.sprites, sprite);
 	}
 	repeat (ds_map_size(global.materials))
@@ -114,12 +142,12 @@ function pn_level_goto_internal(_levelID)
 				else pn_music_load(global.levelMusic[i]);
 			}
 			
-			global.skybox = buffer_read(currentLevelBuffer, buffer_string);
-			if (global.skybox == "") global.skybox = noone;
+			global.skybox[0] = buffer_read(currentLevelBuffer, buffer_string);
+			if (global.skybox[0] == "") global.skybox[0] = noone;
 			else
 			{
-				pn_sprite_queue("sprSkybox");
-				pn_material_queue(global.skybox);
+				global.skybox[1] = smf_model_load("data/gfx/skybox.smf");
+				pn_material_queue(global.skybox[0]);
 			}
 			
 			for (var i = 0; i < 3; i++) global.skyboxColor[i] = buffer_read(currentLevelBuffer, buffer_u8);
@@ -189,6 +217,8 @@ function pn_level_goto_internal(_levelID)
 	//Start music
 	for (var i = 0; i < 6; i += 5) if (global.levelMusic[i] != noone) FMODGMS_Snd_PlaySound(global.music[? global.levelMusic[i]], global.channel[i == 5]);
 	
+	pn_room_goto(0); //All levels must start at room 0
+	
 	//Special level code
 	switch (_levelID)
 	{
@@ -218,9 +248,13 @@ function pn_level_goto_internal(_levelID)
 		break
 		
 		case (eLevel.trailer): instance_create_depth(0, 0, 0, objTrailer); break
+		
+		case (eLevel.debug):
+			pn_actor_create(objCamera, 0, 0, 10, 0);
+			pn_sprite_queue("sprMario");
+			pn_actor_create(objPlayer, 32, 0, 0, 180);
+		break
 	}
-	
-	pn_room_goto(0); //All levels must start at room 0
 	
 	//Activate events that are flagged to trigger on level start
 	for (var key = ds_map_find_first(global.events); !is_undefined(key); key = ds_map_find_next(global.events, key)) if (global.events[? key][| 0]) pn_event_create(key);
@@ -239,7 +273,8 @@ function pn_room_goto(_roomID)
 	with (all) switch (object_index)
 	{
 		case (objControl):
-		case (rousrDissonance): continue break
+		case (rousrDissonance):
+		case (objCamera): continue break
 		
 		case (objEventHandler): if !(eventList[| 1]) instance_destroy(); break
 		
@@ -278,10 +313,8 @@ function pn_room_goto(_roomID)
 				show_debug_message("!!! PNLevel: Unknown actor ID " + actor[eActorData._id] + " in room " + string(_roomID));
 				continue
 		}
-		with (instance_create_depth(actor[eActorData._x], actor[eActorData._y], 0, actorObject))
+		with (pn_actor_create(actorObject, actor[eActorData._x], actor[eActorData._y], actor[eActorData.z], actor[eActorData._direction]))
 		{
-			z = actor[eActorData.z];
-			faceDirection = actor[eActorData._direction];
 			fPersistent = actor[eActorData._persistent];
 			tag = actor[eActorData.tag];
 			special = actor[eActorData.special];
@@ -289,4 +322,17 @@ function pn_room_goto(_roomID)
 		
 		i++;
 	}
+}
+
+function pn_actor_create(_object, _x, _y, _z, _faceDirection)
+{
+	var actor = instance_create_depth(_x, _y, 0, _object);
+	with (actor)
+	{
+		z = _z;
+		faceDirection = _faceDirection;
+		yaw = _faceDirection;
+		postInitialize();
+	}
+	return (actor)
 }

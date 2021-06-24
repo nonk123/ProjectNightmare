@@ -104,5 +104,5 @@ global.clock.add_cycle_method(function ()
 			else pn_level_goto(eLevel.title);
 		break
 	}
-	if (input_check_pressed(eBind.pause)) pn_level_goto(eLevel.title);
+	if (input_check_pressed(eBind.pause)) pn_level_goto(eLevel.debug);
 });

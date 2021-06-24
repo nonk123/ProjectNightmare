@@ -7,7 +7,7 @@ function smf_model_load(argument0)
 	Script made by TheSnidr
 	www.TheSnidr.com*/
 	
-	var path, loadBuff, header, version, size, vertBuff, vBuff;
+	var path, loadBuff, header, version, size, vBuff;
 	
 	path = argument0;
 	if !(file_exists(path)) return (-1)
@@ -16,26 +16,40 @@ function smf_model_load(argument0)
 	header = buffer_read(loadBuff, buffer_u16);
 	version = buffer_read(loadBuff, buffer_string);
 
-	if !(string_count("SnidrsModelFormat", version)) vBuff = vertex_create_buffer_from_buffer(loadBuff, SMF_format); //This is an old version of the format
-	else if (string_count("1.0", version))
+	if (version == "SnidrsModelFormat 1.0")
 	{
 	    //This is the most recent version of the format this importer can read
 	    size = buffer_read(loadBuff, buffer_u32);
-	    vertBuff = buffer_create(10, buffer_grow, 1);
-	    buffer_copy(loadBuff, buffer_tell(loadBuff), size, vertBuff, 0);
-	    repeat (size / SMF_format_bytes)
+		show_debug_message(string(size));
+	    vBuff = vertex_create_buffer();
+		vertex_begin(vBuff, SMF_format);
+	    repeat (size / 40)
 	    {
-	        buffer_seek(vertBuff, buffer_seek_relative, SMF_format_bytes);
-	        var pos = buffer_tell(vertBuff), tempBuff = buffer_create(10, buffer_grow, 1);
-	        buffer_copy(vertBuff, pos, size, tempBuff, 0);
-	        buffer_copy(tempBuff, 0, size, vertBuff, pos + 4);
-	        buffer_delete(tempBuff);
-	        repeat (4) buffer_write(vertBuff, buffer_u8, 255);
+			var xx = buffer_read(loadBuff, buffer_f32);
+			var yy = buffer_read(loadBuff, buffer_f32);
+			var zz = buffer_read(loadBuff, buffer_f32);
+			var nx = buffer_read(loadBuff, buffer_f32);
+			var ny = buffer_read(loadBuff, buffer_f32);
+			var nz = buffer_read(loadBuff, buffer_f32);
+			var u = buffer_read(loadBuff, buffer_f32);
+			var v = buffer_read(loadBuff, buffer_f32);
+			var r1 = buffer_read(loadBuff, buffer_u8);
+			var g1 = buffer_read(loadBuff, buffer_u8);
+			var b1 = buffer_read(loadBuff, buffer_u8);
+			var a1 = buffer_read(loadBuff, buffer_u8);
+			var r2 = buffer_read(loadBuff, buffer_u8);
+			var g2 = buffer_read(loadBuff, buffer_u8);
+			var b2 = buffer_read(loadBuff, buffer_u8);
+			var a2 = buffer_read(loadBuff, buffer_u8);
+	        vertex_position_3d(vBuff, xx, yy, zz);
+			vertex_normal(vBuff, nx, ny, nz);
+			vertex_texcoord(vBuff, u, v);
+			vertex_color(vBuff, c_white, 1);
+			vertex_color(vBuff, make_color_rgb(r1, g1, b1), a1 / 255);
+			vertex_color(vBuff, make_color_rgb(r2, g2, b2), a2 / 255);
 	    }
-	    vBuff = vertex_create_buffer_from_buffer(vertBuff, SMF_format);
-	    buffer_delete(vertBuff);
+		vertex_end(vBuff);
 	}
-	else show_message(path + " was made with a newer version of the SMF format and is not supported");
 	buffer_delete(loadBuff);
 	vertex_freeze(vBuff);
 	

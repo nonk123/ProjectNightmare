@@ -41,7 +41,10 @@ global.levelData = ds_map_create();
 global.events = ds_map_create();
 
 //Graphics
-global.skybox = noone;
+global.cameraDefaultProjection = camera_get_proj_mat(view_camera[0]);
+global.currentShader = shWorld;
+
+global.skybox = [noone, undefined];
 global.skyboxColor = [0, 0, 0];
 global.fogDistance = [0, 65536];
 global.fogColor = c_black;
@@ -74,6 +77,8 @@ global.clock.add_cycle_method(function ()
 		timer_tick(i);
 		show_debug_message(string(global.levelMusic[slot + 1]));
 	}
+	
+	with (objActor) tick();
 });
 
 //Settings

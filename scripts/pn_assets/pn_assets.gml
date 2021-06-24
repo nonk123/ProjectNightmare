@@ -37,13 +37,17 @@ NOTE: Loading a model will also load the materials used by it.*/
 #macro mDirSprites "data/gfx/sprites/"
 
 enum eSpriteType {normal, rotate, billboard, billboardRotate}
-enum eModelType {_static, animated}
+enum eModelType
+{
+	_static = 4,
+	animated = 5
+}
 
 function pn_sprite_queue(_name)
 {
 	if (ds_map_exists(global.sprites, _name)) exit
 	
-	var queueSprite, getSprite = file_find_first(mDirSprites + _name + ".*", 0);
+	var queueSprite, getSprite = file_find_first(mDirSprites + _name + ".*", fa_directory);
 	if (getSprite == "")
 	{
 		show_debug_message("!!! PNSprite: " + _name + " not found");
@@ -60,22 +64,23 @@ function pn_sprite_queue(_name)
 				var _model = [], _submodels = undefined, _bodygroups = undefined, _type = eModelType._static;
 				
 				//Submodels
-				dataTable = file_text_open_read(mDirSprites + _name + "/model.txt");
+				var dataTable = file_text_open_read(mDirSprites + _name + "/model.txt");
 				while !(file_text_eof(dataTable))
 				{
 					var data = string_parse(file_text_read_string(dataTable), false);
 					if (real(data[0]) == 0)
 					{
-						var _getSubmodel = smf_model_load(mDirSprites + _name + "/" + data[1] + ".smf"), i = 0;
+						var _getSubmodel = smf_model_load(mDirSprites + _name + "/" + data[1] + ".smf"), i = 2;
 						if (_getSubmodel != -1)
 						{
 							if (is_undefined(_submodels)) _submodels = [];
 							var _submodel = [_getSubmodel];
-							repeat (array_length(data) - 1)
+							repeat (array_length(data) - 2)
 							{
-								var _material = data[i + 1];
-								pn_material_queue(_material);
-								_submodel[@ i + 1] = _material;
+								var _material = data[i];
+								if (_material == "-1") _material = -1;
+								else pn_material_queue(_material);
+								_submodel[@ i - 1] = _material;
 								i++;
 							}
 							_submodels[@ array_length(_submodels)] = _submodel;
@@ -104,15 +109,15 @@ function pn_sprite_queue(_name)
 						var i = 2;
 						repeat (array_length(data) - 2)
 						{
-							var _bodygroup = [], _bodygroupModel = smf_model_load(mDirSprites + _name + "/" + data[1] + "/" + string(i) + ".smf");
+							var _bodygroup = [], _bodygroupModel = smf_model_load(mDirSprites + _name + "/" + data[1] + "/" + string(i - 2) + ".smf");
 							if (_bodygroupModel == -1)
 							{
-								show_debug_message("!!! PNSprite: Model " + data[i] + " does not exist in bodygroup " + data[1] + " in " + _name);
+								show_debug_message("!!! PNSprite: Model " + data[i] + " does not exist in bodygroup " + data[i] + " in " + _name);
 								exit
 							}
-							pn_material_queue(data[i]);
+							if (data[i] != "-1") pn_material_queue(data[i]);
 							_bodygroup[@ array_length(_bodygroup)] = _bodygroupModel;
-							_bodygroup[@ array_length(_bodygroup)] = data[i];
+							_bodygroup[@ array_length(_bodygroup)] = data[i] == "-1" ? -1 : data[i];
 							i++;
 						}
 						_bodygroups[@ array_length(_bodygroups)] = _bodygroup;
@@ -149,7 +154,7 @@ function pn_sprite_queue(_name)
 				var queueSprite = [_model, _type];
 
 				ds_map_add(global.sprites, _name, queueSprite);
-				show_debug_message("PNSprite: Added " + _name + " (" + string(queueSprite) + ")");
+				show_debug_message("PNSprite: Added " + _name + " (model)");
 			break
 			
 			//Sprites
@@ -277,6 +282,9 @@ function pn_material_queue(_name)
 function pn_material_get_texture(_name)
 {
 	var getMaterial = global.materials[? _name];
+	shader_set_uniform_f(shader_get_uniform(global.currentShader, "scroll"), getMaterial[3], getMaterial[4]);
+	shader_set_uniform_f(shader_get_uniform(global.currentShader, "specular"), getMaterial[5]);
+	shader_set_uniform_f(shader_get_uniform(global.currentShader, "crystal"), getMaterial[6]);
 	return (is_undefined(getMaterial) ? -1 : getMaterial[getMaterial[1] > 1 ? 7 + (current_time * getMaterial[2]) mod (getMaterial[1]) : 7])
 }
 

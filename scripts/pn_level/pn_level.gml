@@ -39,15 +39,7 @@ function pn_level_goto_internal(_levelID)
 	
 	//Remove everything
 	
-	for (var i = 0; i < 2; i++)
-	{
-		FMODGMS_Chan_StopChannel(global.channel[i]);
-		FMODGMS_Chan_Set_Volume(global.channel[i], (global.volume[0] * global.volume[2]) * (1 - i));
-		var slot = i * 5;
-		global.levelMusic[slot + 1] = 1 - i;
-		global.levelMusic[slot + 2] = 1 - i;
-		objControl.timer[i] = -65536;
-	}
+	for (var i = 0; i < 2; i++) FMODGMS_Chan_StopChannel(global.channel[i]);
 	
 	with (all) if !(pn_is_internal_object()) instance_destroy();
 	
@@ -70,6 +62,7 @@ function pn_level_goto_internal(_levelID)
 				vertex_delete_buffer(submodels[i][0]);
 				i++;
 			}
+			i = 0;
 			repeat (array_length(bodygroups))
 			{
 				var getBodygroup = bodygroups[i], j = 0;
@@ -215,7 +208,17 @@ function pn_level_goto_internal(_levelID)
 	else show_debug_message("!!! PNLevel: Level " + string(_levelID) + " not found");
 	
 	//Start music
-	for (var i = 0; i < 6; i += 5) if (global.levelMusic[i] != noone) FMODGMS_Snd_PlaySound(global.music[? global.levelMusic[i]], global.channel[i == 5]);
+	global.battle = false;
+	for (var i = 0; i < 6; i += 5)
+	{
+		var slot = i == 5;
+		global.levelMusic[i + 1] = 1 - slot;
+		global.levelMusic[i + 2] = 1 - slot;
+		objControl.timer[slot] = -65536;
+		if (global.levelMusic[i] != noone) FMODGMS_Snd_PlaySound(global.music[? global.levelMusic[i]], global.channel[slot]);
+	}
+	FMODGMS_Chan_Set_Volume(global.channel[0], global.volume[0] * global.volume[2]);
+	FMODGMS_Chan_Set_Volume(global.channel[1], 0);
 	
 	pn_room_goto(0); //All levels must start at room 0
 	
@@ -252,6 +255,17 @@ function pn_level_goto_internal(_levelID)
 		case (eLevel.debug):
 			pn_actor_create(objCamera, 0, 0, 10, 0);
 			pn_sprite_queue("sprMario");
+			pn_sprite_queue("sprLogo");
+			pn_sprite_queue("sprSidebar");
+			pn_sprite_queue("sprPauseMario");
+			pn_sprite_queue("sprPauseLink");
+			pn_font_queue("fntMario");
+			pn_font_queue("fntZelda");
+			pn_sound_load("sndPauseMario");
+			pn_sound_load("sndPauseLink");
+			pn_sound_load("sndPauseOpen");
+			pn_sound_load("sndPauseClose");
+			pn_sound_load("sndSelect");
 			pn_actor_create(objPlayer, 32, 0, 0, 180);
 		break
 	}

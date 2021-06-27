@@ -71,23 +71,27 @@ baseTick = function()
 {
 	if !(is_undefined(sprite))
 	{
-		var n = 0, getSprite = global.sprites[? sprite], spriteData = getSprite[0], spriteType = getSprite[1];
-		
-		switch (spriteType)
+		var n = 0, getSprite = global.sprites[? sprite];
+		if !(is_undefined(getSprite))
 		{
-			case (eSpriteType.normal):
-			case (eSpriteType.billboard): n = sprite_get_number(spriteData) - 1; break
-			case (eSpriteType.rotate):
-			case (eSpriteType.billboardRotate): n = sprite_get_number(spriteData) * 0.25; break
-			case (eModelType.animated): n = array_length(spriteData[2 + animation]) - 2; break
-		}
+			var spriteData = getSprite[0], spriteType = getSprite[1];
 		
-		if (n) if (spriteType == eModelType.animated)
-		{
-			var getAnimation = spriteData[2 + animation];
-			frame = (getAnimation[1] == 1 || getAnimation[1] == 3) ? (frame + frameSpeed) mod (n) : min(frame + frameSpeed, n);
+			switch (spriteType)
+			{
+				case (eSpriteType.normal):
+				case (eSpriteType.billboard): n = sprite_get_number(spriteData) - 1; break
+				case (eSpriteType.rotate):
+				case (eSpriteType.billboardRotate): n = sprite_get_number(spriteData) * 0.25; break
+				case (eModelType.animated): n = array_length(spriteData[2 + animation]) - 2; break
+			}
+		
+			if (n) if (spriteType == eModelType.animated)
+			{
+				var getAnimation = spriteData[2 + animation];
+				frame = (getAnimation[1] == 1 || getAnimation[1] == 3) ? (frame + frameSpeed) mod (n) : min(frame + frameSpeed, n);
+			}
+			else frame = (frame + frameSpeed) mod (n);
 		}
-		else frame = (frame + frameSpeed) mod (n);
 	}
 	
 	x += xSpeed;
@@ -143,7 +147,9 @@ baseDraw = function()
 		_z = z;
 	}
 	
-	var getSprite = global.sprites[? sprite], spriteData = getSprite[0], spriteType = getSprite[1];
+	var getSprite = global.sprites[? sprite];
+	if (is_undefined(getSprite)) exit
+	var spriteData = getSprite[0], spriteType = getSprite[1];
 	if (spriteType > eSpriteType.billboardRotate) //Sprite is a static or animated model
 	{
 		if (spriteType == eModelType.animated && framePrevious != _frame)

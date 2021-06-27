@@ -499,6 +499,7 @@ function pn_music_load(_name)
 					{
 						var _start = real(data[1]);
 						FMODGMS_Snd_Set_LoopPoints(loadMusic, _start == -1 ? 0 : _start, _start == -1 ? FMODGMS_Snd_Get_Length(loadMusic) : real(data[2]));
+						FMODGMS_Snd_Set_LoopMode(loadMusic, 1, -1)
 						break
 					}
 					file_text_readln(dataTable);

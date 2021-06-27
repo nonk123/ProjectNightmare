@@ -7,3 +7,7 @@ sndPause
 sndMessageOpen
 sndMessage
 sndMessageClose
+sndPauseMario
+sndPauseLink
+sndPauseOpen
+sndPauseClose

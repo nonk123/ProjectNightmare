@@ -4,7 +4,13 @@ if !(surface_exists(surface)) surface = surface_create(camera_get_view_width(vie
 
 surface_set_target(surface);
 switch (transition)
-{	
+{
+	case (eTransition.circle):
+		draw_set_color(c_black);
+		draw_circle(surface_get_width(surface) * 0.5, surface_get_height(surface) * 0.5, (reverse ? (timer[0] / 60) : (60 - timer[0])) * surface_get_width(surface), false);
+		draw_set_color(c_white);
+	break
+	
 	case (eTransition.circle2):
 		draw_set_color(c_black);
 		draw_rectangle(0, 0, surface_get_width(surface), surface_get_height(surface), false);

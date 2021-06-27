@@ -1,2 +1,3 @@
 fntMario|12|0|0|!|~
+fntZelda|12|0|0|!|~
 fntMessage|94|!|1|0

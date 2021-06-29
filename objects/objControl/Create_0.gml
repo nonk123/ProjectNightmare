@@ -13,6 +13,11 @@ global.fonts = ds_map_create();
 global.sounds = ds_map_create();
 global.music = ds_map_create();
 
+var missingAssetTexture = sprite_get_texture(sprMissingAsset, 0);
+global.missingSprite = [sprMissingAsset, eSpriteType.normal, missingAssetTexture];
+global.missingMaterial = [sprMissingAsset, 1, undefined, 0, 0, 0, 0, missingAssetTexture];
+global.missingFont = font_add_sprite(sprMissingAsset, "!", false, 0);
+
 /*-----
 SYSTEMS
 -----*/

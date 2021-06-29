@@ -58,7 +58,7 @@ function pn_sprite_queue(_name)
 		var getExt = string_lower(filename_ext(getSprite));
 		switch (getExt)
 		{
-			//Models (WIP)
+			//Models
 			case (""):
 				//Look in model.txt for model data before loading
 				var _model = [], _submodels = undefined, _bodygroups = undefined, _type = eModelType._static;
@@ -202,7 +202,7 @@ function pn_sprite_queue(_name)
 function pn_sprite_get_sprite(_name)
 {
 	var getSprite = global.sprites[? _name];
-	return ((is_undefined(getSprite) || is_array(getSprite[0])) ? -1 : getSprite[0])
+	return ((is_undefined(getSprite) || is_array(getSprite[0])) ? global.missingSprite[0] : getSprite[0])
 }
 
 /*-----MATERIALS-----
@@ -285,7 +285,7 @@ function pn_material_get_texture(_name)
 	shader_set_uniform_f(shader_get_uniform(global.currentShader, "scroll"), getMaterial[3], getMaterial[4]);
 	shader_set_uniform_f(shader_get_uniform(global.currentShader, "specular"), getMaterial[5]);
 	shader_set_uniform_f(shader_get_uniform(global.currentShader, "crystal"), getMaterial[6]);
-	return (is_undefined(getMaterial) ? -1 : getMaterial[getMaterial[1] > 1 ? 7 + (current_time * getMaterial[2]) mod (getMaterial[1]) : 7])
+	return (is_undefined(getMaterial) ? global.missingMaterial[7] : getMaterial[getMaterial[1] > 1 ? 7 + (current_time * getMaterial[2]) mod (getMaterial[1]) : 7])
 }
 
 /*-----FONTS-----
@@ -387,7 +387,7 @@ function pn_font_queue(_name)
 function pn_font_get_font(_name)
 {
 	var getFont = global.fonts[? _name];
-	return (is_array(getFont) ? getFont[0] : getFont)
+	return (is_undefined(getFont) ? global.missingFont : (is_array(getFont) ? getFont[0] : getFont))
 }
 
 /*-----SOUNDS-----

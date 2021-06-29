@@ -126,6 +126,7 @@
     {"id":{"name":"input_gamepad_get_description","path":"scripts/input_gamepad_get_description/input_gamepad_get_description.yy",},"order":3,},
     {"id":{"name":"dq_create","path":"scripts/dq_create/dq_create.yy",},"order":1,},
     {"id":{"name":"input_source_detect_any","path":"scripts/input_source_detect_any/input_source_detect_any.yy",},"order":3,},
+    {"id":{"name":"sprMissingAsset","path":"sprites/sprMissingAsset/sprMissingAsset.yy",},"order":15,},
     {"id":{"name":"input_cursor_verbs","path":"scripts/input_cursor_verbs/input_cursor_verbs.yy",},"order":7,},
     {"id":{"name":"dq_create_from_matrix","path":"scripts/dq_create_from_matrix/dq_create_from_matrix.yy",},"order":2,},
     {"id":{"name":"rousrDissonance_event_step","path":"scripts/rousrDissonance_event_step/rousrDissonance_event_step.yy",},"order":5,},

@@ -415,6 +415,9 @@
     {"CopyToMask":-1,"filePath":"datafiles/data/gfx/materials","resourceVersion":"1.0","name":"mtlMarioEye6.png","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/data/gfx/sprites","resourceVersion":"1.0","name":"sprExclamation.png","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/data/sfx/sounds","resourceVersion":"1.0","name":"sndExclamation.ogg","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/sfx/sounds","resourceVersion":"1.0","name":"sndNickTakeThat.ogg","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/sfx/sounds","resourceVersion":"1.0","name":"sndNickObjection.ogg","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/sfx/sounds","resourceVersion":"1.0","name":"sndNickHoldIt.ogg","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.2.560",

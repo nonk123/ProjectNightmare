@@ -24,7 +24,8 @@ enum eEventAction
 	setCameraRoll,
 	setCameraFOV,
 	setCameraTarget,
-	lerpCamera
+	lerpCamera,
+	exclamation
 }
 
 function pn_event_create(_eventID)

@@ -168,6 +168,21 @@ global.clock.add_cycle_method(function ()
 				eventListPos++;
 	        break
 			
+			//OTHER MISSING ACTIONS ETC ETC CAMERA.....
+			
+			case (eEventAction.exclamation):
+				var voice = "sndExclamation";
+				if (action[2]) switch (action[1])
+				{
+					case (0): voice = "sndNickObjection"; break
+					case (1): voice = "sndNickTakeThat"; break
+					case (2): voice = "sndNickHoldIt"; break
+				}
+				
+				instance_create_depth(0, 0, 0, objExclamation).image_index = action[1];
+				audio_play_sound(global.sounds[? voice][0], 1, false);
+			break
+			
 	        default:
 				show_debug_message("!!! PNEvent: Unknown action " + string(actionID) + " in event " + string(eventID));
 				eventListPos++;

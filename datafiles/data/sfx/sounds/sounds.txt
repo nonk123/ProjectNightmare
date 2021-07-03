@@ -11,3 +11,4 @@ sndPauseMario
 sndPauseLink
 sndPauseOpen
 sndPauseClose
+sndExclamation

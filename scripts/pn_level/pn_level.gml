@@ -202,23 +202,29 @@ function pn_level_goto_internal(_levelID)
 				pn_sound_load("sndMessageClose");
 			}
 			
+			var actions = pn_event_find_actions(eEventAction.exclamation);
+			if (array_length(actions))
+			{
+				pn_sprite_queue("sprExclamation");
+				i = 0;
+				repeat (array_length(actions))
+				{
+					var voice = "sndExclamation";
+					if (actions[i][2]) switch (actions[i][1])
+					{
+						case (0): voice = "sndNickObjection"; break
+						case (1): voice = "sndNickTakeThat"; break
+						case (2): voice = "sndNickHoldIt"; break
+					}
+					pn_sound_load(voice);
+					i++;
+				}
+			}
+			
 			carton_destroy(levelCarton);
 		}
 	}
 	else show_debug_message("!!! PNLevel: Level " + string(_levelID) + " not found");
-	
-	//Start music
-	global.battle = false;
-	for (var i = 0; i < 6; i += 5)
-	{
-		var slot = i == 5;
-		global.levelMusic[i + 1] = 1 - slot;
-		global.levelMusic[i + 2] = 1 - slot;
-		objControl.timer[slot] = -65536;
-		if (global.levelMusic[i] != noone) FMODGMS_Snd_PlaySound(global.music[? global.levelMusic[i]], global.channel[slot]);
-	}
-	FMODGMS_Chan_Set_Volume(global.channel[0], global.volume[0] * global.volume[2]);
-	FMODGMS_Chan_Set_Volume(global.channel[1], 0);
 	
 	pn_room_goto(0); //All levels must start at room 0
 	
@@ -267,11 +273,29 @@ function pn_level_goto_internal(_levelID)
 			pn_sound_load("sndPauseClose");
 			pn_sound_load("sndSelect");
 			pn_actor_create(objPlayer, 32, 0, 0, 180);
+			
+			pn_sprite_queue("sprExclamation");
+			pn_sound_load("sndExclamation");
+			instance_create_depth(0, 0, 0, objExclamation);
+			audio_play_sound(global.sounds[? "sndExclamation"][0], 1, false);
 		break
 	}
 	
 	//Activate events that are flagged to trigger on level start
 	for (var key = ds_map_find_first(global.events); !is_undefined(key); key = ds_map_find_next(global.events, key)) if (global.events[? key][| 0]) pn_event_create(key);
+	
+	//Start music
+	global.battle = false;
+	for (var i = 0; i < 6; i += 5)
+	{
+		var slot = i == 5;
+		global.levelMusic[i + 1] = 1 - slot;
+		global.levelMusic[i + 2] = 1 - slot;
+		objControl.timer[slot] = -65536;
+		if (global.levelMusic[i] != noone) FMODGMS_Snd_PlaySound(global.music[? global.levelMusic[i]], global.channel[slot]);
+	}
+	FMODGMS_Chan_Set_Volume(global.channel[0], global.volume[0] * global.volume[2]);
+	FMODGMS_Chan_Set_Volume(global.channel[1], 0);
 }
 
 function pn_room_goto(_roomID)

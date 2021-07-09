@@ -73,14 +73,14 @@ function pn_level_goto_internal(_levelID)
 				}
 				i++;
 			}
-			ds_list_clear(SMF_bindList);
-			ds_list_clear(SMF_bindLocalList);
-			for (var i = 0; i < ds_list_size(SMF_frameList); i++) ds_grid_destroy(SMF_frameList[| i]);
-			ds_list_clear(SMF_frameList);
 		}
 		else sprite_delete(getSprite);
 		ds_map_delete(global.sprites, sprite);
 	}
+	ds_list_clear(SMF_bindList);
+	ds_list_clear(SMF_bindLocalList);
+	for (var i = 0; i < ds_list_size(SMF_frameList); i++) ds_grid_destroy(SMF_frameList[| i]);
+	ds_list_clear(SMF_frameList);
 	repeat (ds_map_size(global.materials))
 	{
 		var material = ds_map_find_first(global.materials);

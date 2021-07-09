@@ -418,6 +418,7 @@
     {"CopyToMask":-1,"filePath":"datafiles/data/sfx/sounds","resourceVersion":"1.0","name":"sndNickTakeThat.ogg","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/data/sfx/sounds","resourceVersion":"1.0","name":"sndNickObjection.ogg","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/data/sfx/sounds","resourceVersion":"1.0","name":"sndNickHoldIt.ogg","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/data/sfx/music","resourceVersion":"1.0","name":"musLinkLose.ogg","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.2.560",

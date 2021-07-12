@@ -143,7 +143,9 @@ function pn_level_goto_internal(_levelID)
 				pn_material_queue(global.skybox[0]);
 			}
 			
-			for (var i = 0; i < 3; i++) global.skyboxColor[i] = buffer_read(currentLevelBuffer, buffer_f32);
+			global.skyboxColor = [];
+			for (var i = 0; i < 3; i++) global.skyboxColor[@ i] = buffer_read(currentLevelBuffer, buffer_f32);
+			global.skyboxColor = make_color_rgb(global.skyboxColor[0], global.skyboxColor[1], global.skyboxColor[2]);
 			for (var i = 0; i < 2; i++) global.fogDistance[i] = buffer_read(currentLevelBuffer, buffer_f32);
 			for (var i = 0; i < 4; i++) global.fogColor[i] = buffer_read(currentLevelBuffer, buffer_f32);
 			for (var i = 0; i < 3; i++) global.lightNormal[i] = buffer_read(currentLevelBuffer, buffer_f32);
@@ -259,8 +261,9 @@ function pn_level_goto_internal(_levelID)
 		case (eLevel.trailer): instance_create_depth(0, 0, 0, objTrailer); break
 		
 		case (eLevel.debug):
-			pn_actor_create(objCamera, 0, 0, 10, 0);
-			pn_sprite_queue("sprMario");
+			pn_actor_create(objCamera, 0, 0, 16, 0);
+			//pn_sprite_queue("sprMarioOld");
+			pn_sprite_queue("sprLink");
 			pn_sprite_queue("sprLogo");
 			pn_sprite_queue("sprSidebar");
 			pn_sprite_queue("sprPauseMario");
@@ -272,12 +275,7 @@ function pn_level_goto_internal(_levelID)
 			pn_sound_load("sndPauseOpen");
 			pn_sound_load("sndPauseClose");
 			pn_sound_load("sndSelect");
-			pn_actor_create(objPlayer, 32, 0, 0, 180);
-			
-			pn_sprite_queue("sprExclamation");
-			pn_sound_load("sndExclamation");
-			instance_create_depth(0, 0, 0, objExclamation);
-			audio_play_sound(global.sounds[? "sndExclamation"][0], 1, false);
+			pn_actor_create(objPlayer, 48, 12, 0, 160);
 		break
 	}
 	
@@ -328,7 +326,7 @@ function pn_room_goto(_roomID)
 		var actor = roomActors[i];
 		
 		//Check if actor is "dead" (destroyed while persistent)
-		if (global.levelStart && actor[eActorData._persistent])
+		if (!global.levelStart && actor[eActorData._persistent])
 		{
 			var dead = false;
 			for (var j = 0; j < ds_list_size(roomData[eRoomData.deadActors]); j++) if (i == roomData[eRoomData.deadActors][| j])

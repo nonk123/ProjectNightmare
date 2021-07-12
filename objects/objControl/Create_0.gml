@@ -1,6 +1,6 @@
 /// @description Initialize Game
 
-show_debug_overlay(true);
+//show_debug_overlay(true);
 draw_set_circle_precision(32);
 
 /*--------
@@ -51,7 +51,7 @@ global.cameraDefaultProjection = camera_get_proj_mat(view_camera[0]);
 global.currentShader = shWorld;
 
 global.skybox = [noone, undefined];
-global.skyboxColor = [0, 0, 0];
+global.skyboxColor = [];
 global.fogDistance = [0, 65536];
 global.fogColor = c_black;
 global.lightNormal = [-1, 0, -1];

@@ -29,7 +29,8 @@ var time = current_time * 0.001;
 
 //Textured skybox
 
-if (global.skybox[0] != noone)
+if (global.skybox[0] == noone) draw_clear(global.skyboxColor);
+else
 {
 	global.currentShader = shSkybox;
 	shader_set(shSkybox);

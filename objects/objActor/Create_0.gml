@@ -11,6 +11,7 @@ hp = 0;
 //Visual
 sprite = undefined;
 animation = 0;
+animationFinished = false;
 frame = 0;
 framePrevious = -1;
 frameSpeed = 0;
@@ -69,6 +70,7 @@ postInitialize = function() { basePostInitialize(); }
 //Update Actor (automatically called by objControl)
 baseTick = function()
 {
+	
 	if !(is_undefined(sprite))
 	{
 		var n = 0, getSprite = global.sprites[? sprite];
@@ -87,8 +89,16 @@ baseTick = function()
 		
 			if (n) if (spriteType == eModelType.animated)
 			{
-				var getAnimation = spriteData[2 + animation];
-				frame = (getAnimation[1] == 1 || getAnimation[1] == 3) ? (frame + frameSpeed) mod (n) : min(frame + frameSpeed, n);
+				animationFinished = false;
+				
+				var getAnimation = spriteData[2 + animation], frameCycleType = getAnimation[1];
+				if (frameCycleType == 1 || frameCycleType == 3) frame = (frame + frameSpeed) mod (n); //Looping animation
+				else //Animation plays only once
+				{
+					var frames = n - 1;
+					frame = min(frame + frameSpeed, frames);
+					animationFinished = frame == frames;
+				}
 			}
 			else frame = (frame + frameSpeed) mod (n);
 		}

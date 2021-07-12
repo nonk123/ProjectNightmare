@@ -281,11 +281,23 @@ function pn_material_queue(_name)
 
 function pn_material_get_texture(_name)
 {
+	if (_name == -1) return (-1)
+	
 	var getMaterial = global.materials[? _name];
-	shader_set_uniform_f(shader_get_uniform(global.currentShader, "scroll"), getMaterial[3], getMaterial[4]);
-	shader_set_uniform_f(shader_get_uniform(global.currentShader, "specular"), getMaterial[5]);
-	shader_set_uniform_f(shader_get_uniform(global.currentShader, "crystal"), getMaterial[6]);
-	return (is_undefined(getMaterial) ? global.missingMaterial[7] : getMaterial[getMaterial[1] > 1 ? 7 + (current_time * getMaterial[2]) mod (getMaterial[1]) : 7])
+	if (is_undefined(getMaterial))
+	{
+		shader_set_uniform_f(shader_get_uniform(global.currentShader, "scroll"), global.missingMaterial[3], global.missingMaterial[4]);
+		shader_set_uniform_f(shader_get_uniform(global.currentShader, "specular"), global.missingMaterial[5]);
+		shader_set_uniform_f(shader_get_uniform(global.currentShader, "crystal"), global.missingMaterial[6]);
+		return (global.missingMaterial[7])
+	}
+	else
+	{
+		shader_set_uniform_f(shader_get_uniform(global.currentShader, "scroll"), getMaterial[3], getMaterial[4]);
+		shader_set_uniform_f(shader_get_uniform(global.currentShader, "specular"), getMaterial[5]);
+		shader_set_uniform_f(shader_get_uniform(global.currentShader, "crystal"), getMaterial[6]);
+		return (getMaterial[getMaterial[1] > 1 ? 7 + (current_time * getMaterial[2]) mod (getMaterial[1]) : 7])
+	}
 }
 
 /*-----FONTS-----

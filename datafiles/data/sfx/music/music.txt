@@ -1,3 +1,4 @@
 musTitle|-1
 musOverworld|-1
+musHyrule|-1
 musVoid|-1

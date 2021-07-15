@@ -2,3 +2,4 @@ sprLogo|2|0|0.5|0.5
 sprNNLogo|1|0|0.5|0.5
 sprSidebar|4|0|0|0
 sprExclamation|3|0|0.5|0.5
+sprFairy|4|0|0|0

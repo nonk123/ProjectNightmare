@@ -262,8 +262,7 @@ function pn_level_goto_internal(_levelID)
 		
 		case (eLevel.debug):
 			pn_actor_create(objCamera, 0, 0, 16, 0);
-			//pn_sprite_queue("sprMarioOld");
-			pn_sprite_queue("sprLink");
+			pn_sprite_queue("sprMario");
 			pn_sprite_queue("sprLogo");
 			pn_sprite_queue("sprSidebar");
 			pn_sprite_queue("sprPauseMario");

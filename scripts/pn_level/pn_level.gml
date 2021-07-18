@@ -45,6 +45,17 @@ function pn_level_goto_internal(_levelID)
 	
 	ds_map_clear(global.events);
 	
+	repeat (ds_map_size(global.levelData))
+	{
+		var roomID = ds_map_find_first(global.levelData), roomModel = global.levelData[? roomID][eRoomData.model], i = 0;
+		repeat (array_length(roomModel) * 0.5)
+		{
+			vertex_delete_buffer(roomModel[i]);
+			i += 2;
+		}
+		ds_map_delete(global.levelData, roomID);
+	}
+	
 	//Unload assets
 	if !(is_undefined(global.skybox[1]))
 	{
@@ -146,26 +157,27 @@ function pn_level_goto_internal(_levelID)
 			global.skyboxColor = [];
 			for (var i = 0; i < 3; i++) global.skyboxColor[@ i] = buffer_read(currentLevelBuffer, buffer_f32);
 			global.skyboxColor = make_color_rgb(global.skyboxColor[0], global.skyboxColor[1], global.skyboxColor[2]);
-			for (var i = 0; i < 2; i++) global.fogDistance[i] = buffer_read(currentLevelBuffer, buffer_f32);
-			for (var i = 0; i < 4; i++) global.fogColor[i] = buffer_read(currentLevelBuffer, buffer_f32);
-			for (var i = 0; i < 3; i++) global.lightNormal[i] = buffer_read(currentLevelBuffer, buffer_f32);
-			for (var i = 0; i < 4; i++) global.lightColor[i] = buffer_read(currentLevelBuffer, buffer_f32);
-			for (var i = 0; i < 4; i++) global.lightAmbientColor[i] = buffer_read(currentLevelBuffer, buffer_f32);
+			for (i = 0; i < 2; i++) global.fogDistance[i] = buffer_read(currentLevelBuffer, buffer_f32);
+			for (i = 0; i < 4; i++) global.fogColor[i] = buffer_read(currentLevelBuffer, buffer_f32);
+			for (i = 0; i < 3; i++) global.lightNormal[i] = buffer_read(currentLevelBuffer, buffer_f32);
+			for (i = 0; i < 4; i++) global.lightColor[i] = buffer_read(currentLevelBuffer, buffer_f32);
+			for (i = 0; i < 4; i++) global.lightAmbientColor[i] = buffer_read(currentLevelBuffer, buffer_f32);
 			
-			var events = buffer_read(currentLevelBuffer, buffer_u16), rooms = buffer_read(currentLevelBuffer, buffer_u16);
+			var events = buffer_read(currentLevelBuffer, buffer_u32), rooms = buffer_read(currentLevelBuffer, buffer_u32);
 			
 			buffer_delete(currentLevelBuffer);
 			
 			//Events
 			show_debug_message(string(events) + " events found");
-			for (var i = 1, n = events + 1; i < n; i++)
+			i = 1;
+			repeat (events)
 			{
 				var loadEvent = ds_list_create(), j = 3;
 				
 				currentLevelBuffer = carton_get_buffer(levelCarton, i);
 				
 				for (var j = 0; j < 2; j++) ds_list_add(loadEvent, buffer_read(currentLevelBuffer, buffer_u8));
-				repeat (buffer_read(currentLevelBuffer, buffer_u16))
+				repeat (buffer_read(currentLevelBuffer, buffer_u32))
 				{
 					var actionData = string_parse(buffer_read(currentLevelBuffer, buffer_string), true), eventAction, actionArgs = array_length(actionData), j = 0;
 					if (actionArgs == 1) eventAction = actionData[0]; //Action has no arguments, therefore a string
@@ -186,6 +198,56 @@ function pn_level_goto_internal(_levelID)
 				var eventID = carton_get_metadata(levelCarton, i);
 				show_debug_message(string(i) + "/" + string(n - 1) + ", ID " + eventID + ", " + string(ds_list_size(loadEvent)) + " actions");
 				ds_map_add_list(global.events, real(eventID), loadEvent);
+				
+				i++;
+			}
+			
+			//Rooms
+			repeat (rooms)
+			{
+				currentLevelBuffer = carton_get_buffer(levelCarton, i);
+				var roomID = real(carton_get_metadata(levelCarton, i)), roomData = [undefined, undefined, undefined, undefined];
+				
+				var submodels = buffer_read(currentLevelBuffer, buffer_u32);
+				var collisions = buffer_read(currentLevelBuffer, buffer_u32);
+				var actors = buffer_read(currentLevelBuffer, buffer_u32);
+				var movers = buffer_read(currentLevelBuffer, buffer_u32);
+				
+				buffer_delete(currentLevelBuffer);
+				
+				//Model
+				if (submodels)
+				{
+					i++;
+					var getRoomModel = [];
+					repeat (submodels)
+					{
+						//Submodel
+						currentLevelBuffer = carton_get_buffer(levelCarton, i);
+						var submodel = vertex_create_buffer_from_buffer(currentLevelBuffer, SMF_format);
+						vertex_freeze(submodel);
+						getRoomModel[@ array_length(getRoomModel)] = submodel;
+						buffer_delete(currentLevelBuffer);
+						
+						//Material
+						var getMaterial = carton_get_metadata(levelCarton, i)
+						if (getMaterial == "-1") getMaterial = -1;
+						getRoomModel[@ array_length(getRoomModel)] = getMaterial;
+						pn_material_queue(getMaterial);
+						
+						i++;
+					}
+					roomData[eRoomData.model] = getRoomModel;
+				}
+				
+				//Collision
+				
+				//Actors
+				
+				//Movers
+				
+				ds_map_add(global.levelData, roomID, roomData);
+				if (!submodels && !collisions && !actors && !movers) i++;
 			}
 			
 			//Event assets

@@ -64,7 +64,7 @@ repeat (ds_priority_size(renderPriority))
 smf_matrix_reset();
 
 //Level
-/*var roomData = global.levelData[? global.levelRoom];
+var roomData = global.levelData[? global.levelRoom];
 if !(is_undefined(roomData))
 {
 	var roomModel = roomData[eRoomData.model];
@@ -77,6 +77,6 @@ if !(is_undefined(roomData))
 			i += 2;
 		}
 	}
-}*/
+}
 
 shader_reset();

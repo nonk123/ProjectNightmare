@@ -71,10 +71,12 @@ if !(is_undefined(roomData))
 	if !(is_undefined(roomModel))
 	{
 		var i = 0;
-		repeat (array_length(roomModel) * 0.5)
+		repeat (array_length(roomModel))
 		{
-			vertex_submit(roomModel[i], pr_trianglelist, pn_material_get_texture(roomModel[i + 1]));
-			i += 2;
+			var getSubmodel = roomModel[i], material = getSubmodel[eModelData.material];
+			if (is_undefined(material)) continue //Don't draw invisible submodels
+			vertex_submit(getSubmodel[eModelData.submodel], pr_trianglelist, pn_material_get_texture(material));
+			i++;
 		}
 	}
 }

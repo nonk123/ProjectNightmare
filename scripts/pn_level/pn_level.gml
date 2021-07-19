@@ -1,12 +1,24 @@
+/*=============
+INTERNAL MACROS
+=============*/
+
 #macro mDirLevels "data/levels/"
 
-enum eLevel {logo, title, trailer, debug}
-
 enum eRoomData {model, collision, actors, movers, deadActors}
+enum eModelData {submodel, material} //A submodel's material can be changed with events. Setting it to an empty string (turns into undefined in-game) will make it invisible
+enum eCollisionData {mesh, surface, special, active} //active will determine whether or not the mesh can be interacted with. Can be changed with events
+enum eActorData {_id, _x, _y, z, _direction, _persistent, tag, special} //special is a string the game will decode for manipulating the appropriate actor
+enum eMoverData {model, tag, collisions} //collisions is the offset where all the assigned collision IDs are stored
 
-enum eActorData {_id, _x, _y, z, _direction, _persistent, tag, special}
+/*=========
+GAME MACROS
+=========*/
 
-enum eMoverData {model, collision, tag}
+enum eLevel {logo, title, trailer, debug}
+enum eSurface {none}
+enum eSpecial {none}
+
+////////////////////
 
 function pn_level_goto(_levelID) { instance_create_depth(0, 0, -1, objLoading).goto = _levelID; }
 
@@ -47,12 +59,30 @@ function pn_level_goto_internal(_levelID)
 	
 	repeat (ds_map_size(global.levelData))
 	{
-		var roomID = ds_map_find_first(global.levelData), roomModel = global.levelData[? roomID][eRoomData.model], i = 0;
-		repeat (array_length(roomModel) * 0.5)
+		var roomID = ds_map_find_first(global.levelData), getRoom = global.levelData[? roomID], i = 0;
+		
+		//Model
+		if !(is_undefined(getRoom[eRoomData.model])) repeat (array_length(getRoom[eRoomData.model]))
 		{
-			vertex_delete_buffer(roomModel[i]);
-			i += 2;
+			vertex_delete_buffer(getRoom[eRoomData.model][i][eModelData.submodel]);
+			i++;
 		}
+		
+		//Collision
+		i = 0;
+		if !(is_undefined(getRoom[eRoomData.collision])) repeat (array_length(getRoom[eRoomData.collision]))
+		{
+			getRoom[eRoomData.collision][i][eCollisionData.mesh].destroy();
+			i++;
+		}
+		
+		//Actors
+		
+		//Movers
+		
+		//Dead actors
+		if !(is_undefined(getRoom[eRoomData.deadActors])) ds_list_destroy(getRoom[eRoomData.deadActors]);
+		
 		ds_map_delete(global.levelData, roomID);
 	}
 	
@@ -206,7 +236,7 @@ function pn_level_goto_internal(_levelID)
 			repeat (rooms)
 			{
 				currentLevelBuffer = carton_get_buffer(levelCarton, i);
-				var roomID = real(carton_get_metadata(levelCarton, i)), roomData = [undefined, undefined, undefined, undefined];
+				var roomID = real(carton_get_metadata(levelCarton, i)), roomData = array_create(5, undefined);
 				
 				var submodels = buffer_read(currentLevelBuffer, buffer_u32);
 				var collisions = buffer_read(currentLevelBuffer, buffer_u32);
@@ -218,26 +248,40 @@ function pn_level_goto_internal(_levelID)
 				//Model
 				if (submodels)
 				{
+					//Custom collision isn't implemented yet, so use submodels as dummy collision mesh
+					var DUMMY_COLMESH = new colmesh();
+					
 					i++;
 					var getRoomModel = [];
 					repeat (submodels)
 					{
+						var addSubmodel = [];
+						
 						//Submodel
 						currentLevelBuffer = carton_get_buffer(levelCarton, i);
 						var submodel = vertex_create_buffer_from_buffer(currentLevelBuffer, SMF_format);
 						vertex_freeze(submodel);
-						getRoomModel[@ array_length(getRoomModel)] = submodel;
+						addSubmodel[@ eModelData.submodel] = submodel;
+						
+						DUMMY_COLMESH.addMesh(currentLevelBuffer);
+						
 						buffer_delete(currentLevelBuffer);
 						
 						//Material
 						var getMaterial = carton_get_metadata(levelCarton, i)
 						if (getMaterial == "-1") getMaterial = -1;
-						getRoomModel[@ array_length(getRoomModel)] = getMaterial;
-						pn_material_queue(getMaterial);
+						else if (getMaterial == "") getMaterial = undefined;
+						else pn_material_queue(getMaterial);
+						addSubmodel[@ eModelData.material] = getMaterial;
+						
+						getRoomModel[@ array_length(getRoomModel)] = addSubmodel;
 						
 						i++;
 					}
 					roomData[eRoomData.model] = getRoomModel;
+					
+					DUMMY_COLMESH.subdivide(128);
+					roomData[eRoomData.collision] = [[DUMMY_COLMESH, eSurface.none, eSpecial.none]];
 				}
 				
 				//Collision
@@ -290,7 +334,7 @@ function pn_level_goto_internal(_levelID)
 	}
 	else show_debug_message("!!! PNLevel: Level " + string(_levelID) + " not found");
 	
-	pn_room_goto(0); //All levels must start at room 0
+	pn_room_goto(0, true); //All levels must start at room 0
 	
 	//Special level code
 	switch (_levelID)
@@ -357,7 +401,7 @@ function pn_level_goto_internal(_levelID)
 	FMODGMS_Chan_Set_Volume(global.channel[1], 0);
 }
 
-function pn_room_goto(_roomID)
+function pn_room_goto(_roomID, _clearParticles)
 {
 	if !(ds_map_exists(global.levelData, _roomID))
 	{
@@ -378,7 +422,7 @@ function pn_room_goto(_roomID)
 		default: instance_destroy();
 	}
 	
-	ds_list_clear(global.particles);
+	if (_clearParticles) ds_list_clear(global.particles);
 	
 	var roomActors = global.levelData[? _roomID][eRoomData.actors], i = 0;
 	if (is_undefined(roomActors)) exit

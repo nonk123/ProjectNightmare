@@ -16,5 +16,6 @@ camera_apply(view_camera[0]);
 tick = function ()
 {
 	x += (keyboard_check(vk_up) - keyboard_check(vk_down));
+	z = objPlayer.z + 12;
 	baseTick();
 }

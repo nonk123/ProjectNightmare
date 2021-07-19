@@ -31,6 +31,7 @@ emitter = audio_emitter_create();
 
 //Physics
 z = 0;
+zPrevious = 0;
 radius = 4;
 height = 12;
 xSpeed = 0;
@@ -39,9 +40,11 @@ zSpeed = 0;
 faceDirection = 0;
 moveDirection = 0;
 bounciness = 0;
+surface = eSurface.none;
 
 //Flags
 fCollision = true;
+fOnGround = true;
 fEnemy = false; //Make game detect actor as an enemy
 fGravity = true;
 fPersistent = false; //If enabled, won't re-appear in its starting room once destroyed
@@ -70,7 +73,7 @@ postInitialize = function() { basePostInitialize(); }
 //Update Actor (automatically called by objControl)
 baseTick = function()
 {
-	
+	//Update sprite
 	if !(is_undefined(sprite))
 	{
 		var n = 0, getSprite = global.sprites[? sprite];
@@ -104,10 +107,80 @@ baseTick = function()
 		}
 	}
 	
+	//Movement & collision
+	zPrevious = z;
+	
 	x += xSpeed;
 	y += ySpeed;
-	if (fGravity) zSpeed -= 0.1;
+	if (fGravity && !fOnGround) zSpeed -= 0.1;
 	z += zSpeed;
+	
+	if (fCollision)
+	{
+		var getRoom = global.levelData[? global.levelRoom];
+		if (!is_undefined(getRoom) && !is_undefined(getRoom[eRoomData.collision]))
+		{
+			var half = height * 0.5, i = 0;
+			repeat (array_length(getRoom[eRoomData.collision]))
+			{
+				var collision = getRoom[eRoomData.collision][i];
+				if !(collision[eCollisionData.active]) continue
+			
+				var mesh = collision[eCollisionData.mesh];
+			
+				//Top
+				var collision = mesh.castRay(xprevious, yprevious, zPrevious + half, x, y, z + height);
+				if (is_array(collision))
+				{
+					z = collision[2] - height;
+					zSpeed = 0;
+				}
+			
+				//X-axis
+				collision = mesh.castRay(xprevious - radius, yprevious, zPrevious + half, x + radius, y, z + half);
+				if (is_array(collision))
+				{
+					x = collision[0] + collision[3] * radius;
+					xSpeed = 0;
+				}
+			
+				//Y-axis
+				collision = mesh.castRay(xprevious, yprevious - radius, zPrevious + half, x, y + radius, z + half);
+				if (is_array(collision))
+				{
+					y = collision[1] + collision[4] * radius;
+					ySpeed = 0;
+				}
+			
+				//Bottom
+				collision = mesh.castRay(xprevious, yprevious, zPrevious + half, x, y, z);
+				if (is_array(collision))
+				{
+					z = collision[2];
+					zSpeed = 0;
+					fOnGround = true;
+					surface = collision[eCollisionData.surface];
+				}
+				else
+				{
+					fOnGround = false;
+					surface = eSurface.none;
+				}
+			
+				i++;
+			}
+		}
+		else
+		{
+			fOnGround = false;
+			surface = eSurface.none;
+		}
+	}
+	else
+	{
+		fOnGround = false;
+		surface = eSurface.none;
+	}
 }
 tick = function() { baseTick(); }
 

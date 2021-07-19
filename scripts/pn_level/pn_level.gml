@@ -281,7 +281,7 @@ function pn_level_goto_internal(_levelID)
 					roomData[eRoomData.model] = getRoomModel;
 					
 					DUMMY_COLMESH.subdivide(128);
-					roomData[eRoomData.collision] = [[DUMMY_COLMESH, eSurface.none, eSpecial.none]];
+					roomData[eRoomData.collision] = [[DUMMY_COLMESH, eSurface.none, eSpecial.none, true]];
 				}
 				
 				//Collision
@@ -471,6 +471,7 @@ function pn_actor_create(_object, _x, _y, _z, _faceDirection)
 	with (actor)
 	{
 		z = _z;
+		zPrevious = z;
 		faceDirection = _faceDirection;
 		yaw = _faceDirection;
 		postInitialize();

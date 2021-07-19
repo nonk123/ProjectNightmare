@@ -1,6 +1,6 @@
 /// @description Initialize Game
 
-//show_debug_overlay(true);
+show_debug_overlay(true);
 draw_set_circle_precision(32);
 
 /*--------

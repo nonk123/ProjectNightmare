@@ -31,8 +31,6 @@ smf_init();
 FMODGMS_Sys_Create();
 FMODGMS_Sys_Initialize(2);
 
-colmesh_init();
-
 /*----------
 GAME SYSTEMS
 ----------*/

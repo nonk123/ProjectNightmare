@@ -351,11 +351,7 @@ function colmesh() : colmesh_shapes() constructor
 	static addMesh = function(mesh, M)
 	{
 		//Lets you add a mesh to the colmesh.
-		//"mesh" should be either a path to an OBJ file, an array containing buffers, or a buffer containing vertex info in the following format:
-		//	3D position, 3x4 bytes
-		//	3D normal, 3x4 bytes
-		//	UV coords, 2x4 bytes
-		//	Colour, 4 bytes
+		//"mesh" should be either a path to an OBJ file, an array containing buffers, or a buffer containing vertex info in PN's modified SMF format.
 		//This script does not return anything. The mesh as a whole does not have a handle. Triangles are added to the colmesh individually.
 			
 		//Matrix is an optional argument in case you'd like to transform your mesh before adding it to the ColMesh
@@ -384,8 +380,8 @@ function colmesh() : colmesh_shapes() constructor
 		if (mesh >= 0)
 		{
 			//Create triangle list from mesh
-			var bytesPerVert = 3 * 4 + 3 * 4 + 2 * 4 + 4;
-			var bytesPerTri = bytesPerVert * 3;
+			var bytesPerVert = 44;
+			var bytesPerTri = 132;
 			var mBuffSize = buffer_get_size(mesh);
 			var triNum = mBuffSize div bytesPerTri;
 			array_resize(triangles, array_length(triangles) + triNum);
